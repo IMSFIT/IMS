@@ -16,6 +16,7 @@
 \usepackage{url}
 % obrazky
 \usepackage[dvipdf]{graphicx}
+\usepackage{listings} 
 % velikost stranky
 \usepackage{graphicx}
 \usepackage[top=3.5cm, left=2.5cm, text={17cm, 24cm}, ignorefoot]{geometry}
@@ -28,56 +29,162 @@
 \newpage
 
 \section{Úvod}
-Táto dokumentácia sa zaoberá vývojom, implementáciou a testovaním interpretu pre jazyk \emph{IFJ12}. Je logicky rozdelená do celkov, ktoré popisujú jednotlivé fázy, ktorými musel projekt postupne prejsť. Jednotlivé kapitoly a podkapitoly popisujú podstatné problémy, algoritmy a spôsoby, ktoré sme použili pri implementácii interpretu. Dokumentácia taktiež obsahuje grafický návrh konečného automatu realizujúceho funkciu lexikálneho analyzátora a LL-gramatiku.
+Táto dokumentácia sa zaoberá vývojom, implementáciou a testovaním systéum hromadnej obsluhy "Štátna volebná infraštruktúra", ktorá simuluje volebný systém v Českej republike zahrňujúci voľby v okrskov a krajských mestskách a následne odoslanie a počítanie hlasov v informačnom centre.
+\indent
+Na základe modelu a simulácie bude ukázané chovanie systému so zreteľom na ukázanie slabých miest pri voľbách.
 
-\section{Práca v~tíme}
-\subsection{Príprava na projekt}
-Pred samotným začatím projektu prebiehalo základné naštudovanie zadania. V~počiatočných fázach projektu nám bolo množstvo jeho častí nejasných, z~dôvodu neznalosti problematiky implementácie interpretu a jeho súčastí. Preto sme sa snažili naštudovať informácie popri  samotnej implementácií, čo nám niekedy prácu trochu spomaľovalo. Pre správne zdieľanie zdrojových textov a ostatných súborov sme sa rozhodli používať verziovací systém \emph{Git}, ktorý je vzhľadom na jeho ľahké a intuitívne používanie celkom príjemný a tak isto dostatočne zdokumentovaný pre prípady, kedy sme museli za chodu riešiť nejaké problémy s~verziami programu.
-\subsection{Komunikácia v~tíme}
-Na prvom stretnutí sme sa dohodli, že budeme organizovať každý týždeň tímové stretnutie, kde budeme vždy prejednávať aktuálne rozpravacované časti projektu a taktiež problémy, ktoré sme mali pri vývoji jednotilvých častí interpretu. Vzhľadom na časovú náročnosť komunikácie online sme sa rozhodli použiť narýchlejšií spôsob, a tak sme využili voľne dostupný "instant messenger"\footnote{Program umožňujúci posielať a čítať správy v~reálnom čase.} \emph{Skype}.
-\subsection{Použité metodiky}
-Pri počiatočnom vývoji sme nemali celkom jasný smer akým sa budeme uberať. Na začiatku sme zvolili trend, ktorý vychádza z~metódy \emph{Extreme programming}. 
-Rozdelili sme si teda celý interpret na fázy, z~ktorých sa skladá: lexikálna analýza, syntaktická analýza, sémantická analýza a interpreter. Jednotlivé fázy boli porozdelované medzi členov vývojového tímu, kvôli snahe o~najoptimálnejší výsledok zdrojového kódu a taktiež o~maximálnu časovú efektivitu. Každý sa snažil naštudovať potrebné informácie o jemu pridelenej časti skôr, ako boli preberané na prednáškach, aby nám na konci zostalo dostatok času na dôkladné nájdenie a opravenie chýb. Následne po samotnej implementácií boli jednotlivé časti poriadne otestované, a to z~dôvodu vysokej nadväznosti medzi nimi. Pri takomto pridelení práce slúžili aktuálne voľní členovia tímu ako pomocná sila a vytvárali parciálne časti, ktoré boli väčsinou reprezentované funkciami.
-\newpage
+\subsection{Autori}
+Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci autori:
+\begin{itemize}
+\item Martin Maga(xmagam00)
+\item Vojtěch Meca(xmecav00)
+\end{itemize}
 
-\section{Implementácia}
-\subsection{Shell-sort}
-Pri implementácií vstavanej funkcie \texttt{sort} bola využitá metóda Shell-Sort, ktorá pracuje na rovnakom princípe ako \emph{Bubble-sort}\cite{Honzik:Algoritmy}. Táto metóda patrí medzi rýchle metódy, to znamená, že jednotlivé prvky sa premeistňujú k miestu kam patria, väčším krokom, ako iné algoritmy s kvadratickou zložitosťou.\\
-Na začiatku je použitý krok N/2, kde N je dĺžka řeťazca. Vznikne tak N/2 sekvencií znakov, z ktorého každá je spracovaná jedným bublinkovým priechodom. V každom dalšom priechode sa krok zníži na polovicu, tým sa vytvorí polovičný počet čiastočne zoradených podsekvencií a každá se opäť spracuje jedným bublinkovým priechodom. V poslednom priechode sa na celú sekvenciu aplikuje bublinkový priechod s krokom jedna.\\
-Tento algoritmus je nestabilný, a umožňuje prácu \uv{in situ}. Jeho časová zložitost je $\Theta$($n^2$), ale napriek tomu ho môžeme považovať za jeden z najlepších radíacich algoritmov.
-
-
-\subsection{Knuth-Morris-Prattov algoritmus}
-
-Tento algoritmus bol použitý pri implementácií vstavanej funkcie \texttt{find}, ktorá je súčasťou jazyka \emph{IFJ12}.
-Algoritmus slúži na vyhľadávanie podreťazca v~rámci reťazca. Pri implementácií sme sa inšpirovali informáciami, ktoré boli podané na predmete IAL\cite{Honzik:Algoritmy}.
-
- Algoritmus vychádza z myšlienky, ktorá zamedzuje opätovné porovnávanie už porovnaných znakov v reťazci. Tento postup sa docieli vytvorenením tabuľky, v ktorej budeme mať pre každú poziciu vo vyhľadávanom reťazci napísané číslo, ktoré nám bude určovať, koľký prvok vyhľadávaného reťazca mamé porovnávat s aktuálnym znakom v reťazci. Ak  bolo porovnanie na tejto pozícií neúspešné nevraciame sa k začiatočnej pozícií prehľadávania reťazca\cite{Prokop:Algoritmy}. Princíp: Algoritmus najprv vytvorí tabuľku, v ktorej bude mať zapísané, s ktorým znakom vzoru má porovnať aktuálny znak reťazca pri neúspešnom porovnaní. Táto hodnota sa môže líšiť pre každý znak vzoru. Znamená to, že pri nájdení nezhody nemusí prechádzať už porovnané prvky, ale číslo z tabuľky mu dá informáciu o tom, s ktorým znakom vzoru má tento aktuálny znak reťazca porovnať pred ďalším posunom v reťazci tak, aby zbytočne nemrhal časom a porovnaniami, ktoré vlastne už vykonal. KMP algoritmus prechádza reťazec sekvenčne ale v prípade nezhody pokračuje v porovnaní aktuálneho znaku so znakom vzoru zadaným v tabuľke alebo prejde na znak nasledujúci. Algoritmus porovnáva vzor a reťazec pokiaľ počet zostávajúcich znakov v reťazci je väčší alebo rovný ako potrebný počet úspešných porovnaní pre nájdenie zhody so vzorom.Algoritmus pri úspešnom nájdení vracia počiatočný index reťazca, inak vracia hodnotu $-1$.  
-
-Algoritmus má zložisť $\Theta$(n+m), teda lineárnu.
+Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom doktorom Hrubým(konzultácia ohľadne správnosti nášho návrhu Petriho siete).
+\subsection{Validita}
+Experimentovaním sme overovali validitu modelu, ktoré vo forme histogramu a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsoboe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
+\subsection{Zadanie}
+Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
+Obsah je dostupný online z nasledujúceho odkazu: http://perchta.fit.vutbr.cz:8000/vyuka-ims/31.\cite{Prokop:Algoritmy}
 
 
-\subsection{Tabuľka symbolov}
-Tabuľka symbolov je štruktúra, ktorá uchováva informácie o všetkých premenných a funkciách, ktoré užívateľ v priebehu programu definuje. Základom jej implementácie je hashovacia tabuľka s jednosmerne viazanými zoznamami synoným. Z dôvodu zjednodušenia implementácie rekurzivného volania funkcií, je štandartná tabuľka rozšírená o údaj o počte prvkov v jednotlivých zoznamoch a takisto o skupinu funkcií slúžiacich pre vytváranie (a odstraňovanie) kópií prvkov tabuľky. 
 
-\subsection{Lexikálny analyzátor}
-Základný princíp implementácie lexikálneho analyzátoru spočíval v~korektnom návrhu konečného automatu, ktorý tento analyzátor vytvára, a ten musel vychádzať zo špecifikácie jazyka \emph{IFJ12}. Lexikálny analyzátor slúži na rozpoznávanie lexémov zdrojového kódu. Realizuje to na základe jednotlivých stavov konečného automatu. V~prípade, že lexikálny analyzátor narazí na lexikálnu chybu, vráti príslušný chybný token s~informáciou o~chybe. V~opačnom prípade vráti správny typ tokenu a jeho hodnotu reprezentovanú reťazcom. Daný konečný automat rozpoznáva taktiež klúčové a rezervované slová jazyka \emph{IFJ12} a escape sekvencie. Kľúčové a rezervované slová sú rozpoznávané pomocou priechodu statickým poľom obsahujúcim im zodpovedajúce reťazce a porovnávaním hodnoty tokenov s jeho položkami.
+\subsection{Ciele projektu}
+Ciele projektu zahŕňajú:
+\begin{itemize}
+\item Analýza aktuálneho volebného systému v Českej republike
+\item Analýza slabých miest volebného systému
+\item Návrh efektívnejšieho prístupu, ktoré by dokázalo zvýšiť rýchlosť počítania hlasov
+\end{itemize}
 
 
-\subsection{Syntaxou riadený preklad}
-\subsubsection{Globálna syntaktická analýza}
-Pri implementácií syntaktického analyzátoru sme využili LL-gramatiku a syntaktickú analýzu programu sme implementovali v súlade so zadaním metódou zhora nadol pomocou rekurzívneho zostupu. Pri tejto metóde je každý neterminál reprezentovaný pomocou funkcie, pričom počiatočným neterminálom je neterminál \emph{<parser>}. Výnimkou z tohoto postupu je analýza výrazov, kde sme použili inú metódu.
+\section{Rozber témy a použitých technológií}
+Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. Ďalej treba spomenúť, že kód v C++ je pomerne rýchly.
+\indent
+Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
 
-\subsubsection{Syntaktická analýza výrazov}
-Analýza výrazov prebieha pomocou precedenčnej analýzy zdola nahor. Jej podstatou je tabuľka, na základe ktorej je riadená redukcia a samotné vyhodnocovanie správnosti výrazov. K tomuto analyzátor využíva jednoduchý zásobník, tabuľku symbolov a špeciálnu tabulku, ktorá obsahuje zoznam funkcíí, ktoré neboli definované pri volaní. Syntaktický analyzátor priebežne volá lexikálny analyzátor, ktorý mu posiela jednotlivé terminály. Následne ich spracováva s využitím zásobníku a redukčných pravidiel, ktoré sú naviac doplnené o jednotlivé dátové typy a súčasne zabezpečujú aj sémantickú analýzu výrazov.
+Pre zobrazenie výsledkov bola použitá trieda Histogram, ktorá je štandardnou súčasťou knižnice Simlib.
 
-\subsection{Interpret}
-Interpret je poslednou súčasťou projektu a jedná sa o modul, ktorý vykonáva samotný program. Keďže syntaktická analýza výrazov je prevádzaná pomocou precedenčnej analýzy zdola hore, je jednoduché prevádzať všetky výrazy do postfixovej notácie. Rozhodli sme sa využiť to a pre účely interpretu sme implementovali zásobník určený na vyčíslovanie výrazov. Tento zásobník funguje spôsobom, že ako operandy používa vrchné položky zásobníku a výsledok operácie opäť vkladá na vrchol. Výhod tohoto zásobníku je hneď niekoľko. Za prvé, úplne odpadá generovanie vnútorných premenných. Ďalšou výhodou je možnosť použitia zásobníku na predávanie parametrov funkcií (aj vstavaných, aj užívateľsky definovaných). Táto výhoda so sebou prináša možnosť jednoduchej implementácie rozšírenia FUNEXP, ktoré je popísané neskôr.\\
-Interpret pracuje s jednoduchou sadou inštrukcií, ktoré sú v správnom poradí generované syntaktickým analyzátorom. Ten tieto inštrukcie vkladá do zoznamu inštrukcií, ktorý je implementovaný pomocou jednosmerne viazaného lineárneho zoznamu rozšíreného o možnosť skákania na ľubovoľnú inštrukciu. Vďaka tomu, že zásobník je vždy uvažovaný ako implicitný operand inštrukcie, sú tieto navrhnuté v dvojadresnom kóde, kde jedna adresa značí operand a druhá funkciu, v ktorej sa daná operácia realizuje.\\
-Základnými inštrukciami sú vloženie na vrchol zásobníku a vybratie vrcholu zásobníku. Ďalej existuje inštrukcia pre každú logickú a aritmetickú operáciu, ktoré ale nepracujú so žiadnymi operandmi, keďže výpočty prevádzajú na zásobníku. Dôležitými inštrukciami sú tie pre podmienený a nepodmienený skok a s nimi súvisiaca inštrukcia návesti, ktoré sa používajú pre skoky v rámci zoznamu inštrukcií.\\
-Pre účely vstavaných funkcií existuje inštrukcia na vykonanie každej z nich s výnimkou funkcie \texttt{print}, pri ktorej je daná inštrukcia volaná pre každý parameter zvlášť. Nakoniec, funkčnosť užívateľských funckií je zaručená pomocou dvoch inštrukcií, jednou pre volanie funkcie a druhou pre návrat z nej. Všetky inštrukcie spracovávajúce funkcie počítajú s tým, že argumenty týchto funkcií sú dopredu vložené na vrchole zásobníku a takisto je tam návratová hodnota funkcie, aby s ňou bolo možné ďalej pracovať.
+\subsection{Pôvod použitých technológií}
+\begin{itemize}
+\item Simlib -http://www.fit.vutbr.cz/~peringer/SIMLIB/ (GNU LGPL)
+\item C++ - http://en.wikipedia.org/wiki/C++
+\item Ubuntu - http://www.ubuntu.com/
+\item Petriho siete - $http://en.wikipedia.org/wiki/Petri_net$
+\end{itemize}
+\subsection{Volebný systém v Českej republike}
+Česká republika sa zaraďuje medzi dvojkomorové parlamentné 
+systémy. Tvorí ju Poslanecká snemovňa a Senát. Do PS ČR sa volí na 
+základe pomerného voličského systému. Základnú reguláciu nájdeme 
+v Ústave ČR. V čl. 18 nachádzame základné princípy volieb, ako je spôsob 
+voľby tajným hlasovaním na základe všeobecného, rovného a priameho 
+práva, podľa zásad pomerného zastúpenia. Ďalším dôleţitým zákonom je 
+zákon č. 247/1995 Sb., o voľbách. Niektoré ustanovenia sú prevedené 
+vyhláškou č. 233/2000 Sb. Tieto právne pramene sú základnými právnymi 
+prameňmi v oblasti volieb v ČR. 
+ 
+Volebný systém za posledné roky pršiel určitými zmenami, jednou 
+z nich bola zmena po voľbách v roku 1998. Zmena bola uzákonená v roku 
+2000 na základe dohody ODS a ČSSD. Cieľom malo byť posilnenie 
+stability a eliminácia vplyvu malých strán. Výsledkom tejto reformy bol 
+pomerný systém, 35 volebných obvodov, v ktorých bola v jednom skrutíniu 
+aplikovaná D 'Hontova formula.19
+ Prezident Václav Havel šak nesúhlasil 
+s polnením vetšinových prvkov vo volebnom systéme a navrhol Ústavnému 
+súdu zrušenie zmien. Nálezom Ústavného súdu č. 64/2001 Sb. bola vetšina 
+zmien zrušená. Ústavný súd argumentoval názorom, ţe došlo k vzájomnej 
+kombinácii vetšinových prvkov a to narušuje ústavný príkaz pomerného 
+zastúpenia v PS ČR. Vzhľadom k politickému rozloţeniu síl došlo k prijatiu 
+nového zákona, ktorý si vyslúţil značnú kritiku od odbornej verejnosti. 
+Štruktúra celého zákona prešla zmenou, zmenili sa velkosti obvodov, 
+volebná formula, uzatváracia klauzula, počet aj charakter skrutínií. Pôvodná 
+Hagenbach-Bischoffova volebná formula sa zmenila na D'Hotntovú. 
+ 
+19
+ Novák M., Lebeda T. a kol., Volební a stranické systémy. ČR v mezinárodním srovnání, 
+Dobrá Voda: Vydavatelství a nakladatelství Aleš Čeněk, 2004, s. 231 
+  34
+D'Hontov deliteľ sa tak po vzore v celom svete s pomerným zastúpením 
+dostal aj do českého zákona o voľbách. Uzatvárajúca klauzula ostala 
+nezmenená, t.j. 5 \%, čo však neplatí pre koalície, kde sa priamo úmerne 
+zvyšuje podľa počtu koaličných strán (zo 7 \% na 10 \%, z 9 \% na 10 \%, z 10 
+\% na 20 \%). Počet skrutínií sa zmenšil z dvoch na jedno. D'Hontov deliteľ 
+rozdeľuje všetky mandáty priamo na základe volebných obvodov, preto 
+druhé skrutínium stratilo opdstatnenie.20
+ Najvýznamnejšia bola ale zmena 
+veľkosti volebných obvodov. Z pôvodných ôsmich vzniklo štrnásť , ktoré sú 
+identické s krajským samosprávnym delením.21
+ Kandidátske listiny ostali 
+ako listiné, kde poradie kandidátov určuje politická strana. Volič má však 
+právo na posun kandidáta na listine pomocou preferenčného hlasu, kde 
+z pôvodných 4 došlo k zmene na 2 preferenčné hlasy. 
+ 
+Zmenou volebného zákona došlo k posílneniu dvoch veľkých strán, 
+avšak na druhej strane sa do parlamentu dostala aj relatívne malá Strana 
+Zelených. Strany uprostred politického záujmu na základe tejto reformy 
+oslabili. 
 
-\subsection{Rekurzia}
+Odkaz:$http://is.muni.cz/th/108056/pravf-m-a2/Diplomova_prace.pdf$
+
+
+\subsection{Petriho sieť}
+Pre návrh Štátnej volebnej infrašktúry volieb v Českej republike a návrhom komkrétneho spôsobu volieb bol použití deklaratívny model na popis abstraktných modelov Petriho sieť:
+$
+\sum = \langle P,T,F,W,C, M_o \rangle
+$
+\begin{itemize}
+\item P je množina miest
+\item T je množina stavov
+\item F je incidenčná relácia: F $\subseteq \langle P x T \rangle \cup \langle T x P \rangle$ 
+\item W: F $\rightarrow \{ 1,2, \dots \}  $
+\item $C: P \rightarrow N$ kapacita miest
+\item $M_o$ počiatočné značenie $M_o: P \rightarrow N$
+\end{itemize}
+\section{Algoritmus simulácie v Simlibe}
+\begin{verbatim}
+while(kalendář neprázdný)
+vyber první událost z kalendáře událostí
+if(čas události > konečný čas simulace)
+simulace končí
+end if
+nastav aktuální čas simulace na čas právě zpracované události
+vykonej časovaný přechod daný událostí
+vykonej všechny nečasované přechody a nastav časové přechody
+opakuj znova
+\end{verbatim}
+
+Tento algoritmus tvorí základný beh pre simuláciu modelu v Simlib.
+Ešte pred spustením cyklu je potrebné previesť pokus o vykonanie všetkých nečasovaných prechodov a načasovanie časovaných vykonateľných prechodov.
+
+
+\subsubsection{Základné prvky upraveného stochatistického Petriho siete}
+\begin{itemize}
+\item Miesto(Place) je zhromaždisko či sklad značiek, ktoré môže disponovať kapacitou, teda limitom pre počet vložených značiek. Implicitne je kapacita neobmedzená. Miesto disponuje zoznamom vstupných a výstupných hrán, ktoré ho spájajú s okolitými komponentmi. Značky môžu byť vložené ako pred započnutím simulácie, tak aj v jej priebehu.
+\item Prechod(Transition) disponuje rovnako ako miesto zoznamom vstupných a výstupných hrán. Prechod spravidla demonštruje prevedenie nejaké operácie. Popisovaný simulátor disponuje 6 druhmi prechodov:
+\begin{itemize}
+\item prioritný prechod
+\item pravdepodobnostný prechod
+\item časovaný prechod s konštantným spomalením
+\item časovaný prechdod s exponenciálnym spomalením
+\item časovaný prechdod s poissonovým spomalením
+\item časovaný prechdod s rovnomerným spomalením
+\end{itemize}
+
+\item Hrana(Arc) slúži na prepájanie prechodov a miest. Môže disponovať váhou (ohodnotením hrany, ktorá určuje počet značiek, s ktorými bude hrana pracovať. Implicitná váha hrany je 1.
+\item Značka(token) je hybnou silou Petriho sietí. Značky sú presúvané medzi miestami, čím je simulovaná určitá činnosť.
+\end{itemize}
+
+\subsection{Príklad Petriho siete}
+Petriho sítě jsou nejčastěji zobrazovány formou grafu. Kruhy demonstrují místa, obdélníky přechody,
+orientované šipky hrany a kruhy značky na jednotlivých místech.
+\begin{figure}
+\center{
+\includegraphics[scale=0.7]{img/petri.eps}}
+\end{figure}
+
+
+
+\section{Tvorba modelu Petriho siete pre štátnu volebnú infraštruktúru}
 Jedným z dôležitých problémov, ktoré sme museli riešiť, bola implementácia rekurzívneho volania funkcií. Pokiaľ je funkcia zavolaná viac než raz (prebieha rekurzia), vytvorí sa kópia všetkých premenných a parametrov danej funkcie v jej lokálnej tabuľke symbolov a zaradí sa na začiatok zoznamu, do ktorých patrí. To zaručí, že pri vyhľadávaní premennej v tabuľke je vždy nájdená jej najnovšia inštancia a zároveň, že ostatné inštancie patriace predchádzajúcim volaniam nebudú stratené. Jednotlivé bunky tabuľky teda fungujú ako zásobníky, u~ktorých sa pracuje so skupinou premenných na vrchole. Pri návrate z funkcie sú kópie premenných najbližšie vrcholu "zásobníku" odstránené.
 
 \subsection{Rozšírenie \emph{FUNEXP}}
@@ -88,39 +195,17 @@ Testovanie nášho projektu prebiehalo na architektúrach Windows a Linux. Bolo 
 V~konečnej fáze boli vykonané komplexné testy, ktoré overili funkčnost nášho interpretu jazyka \emph{IFJ12} podľa špecifikácie uvedenej v~zadaní. V~prípade, že bola objavená chyba počas testovania, táto chyba bola ihneď odstránená a interpret bol opäť dôkladne otestovaný.
 \newpage
 \section{Záver}
-Práca na projekte, ktorého cieľom bola implementácia interpretu jazyka IFJ12 nám priniesla bohaté skúsenosti s~rozsiahlymi projektami. Naučili sme sa, ako si správne rozdeliť prácu v~tíme, a tak isto aké efektívne spôsoby komunikácie treba zvoliť pri riešení problematiky. V neposlednom rade sme sa naučili používať pokročilé nástroje pri správe verzií programu. Tento projekt nám priniesol množstvo nových informácií a skúseností pri vývoji interpretov jazykov. Funkčnosť nášho projektu bola otestovaná na platformách \emph{GNU Linux} a \emph{Microsoft Windows}\copyright  a výsledky boli porovnané s~nami vytvorenými referenčnými výsledkami.
+Výsledný simulátor systému štátnej volebnej infraštruktúry na základe stochatistického modelu Petriho siete.
 
+\subsection{Štatistiky}
 \newpage
-\section{LL gramatika}
+\section{Zhrnutie simulácií a záver}
 
-  \textcolor{red} {ID}  -- terminál \\
-   $\langle$ $\rangle$ -- neterminál \\
-   $\langle$PARSE$\rangle$ $\rightarrow$ $\langle$COMMAND$\rangle$ $\langle$PARSE$\rangle$ \\
-   $\langle$PARSE$\rangle$ $\rightarrow$ $\langle$FCE DEF$\rangle$ $\langle$PARSE$\rangle$ \\
-   $\langle$COMMAND$\rangle$ $\rightarrow$ $\langle$IF$\rangle$ $\langle$COMMAND$\rangle$ \\
-   $\langle$COMMAND$\rangle$ $\rightarrow$ $\langle$WHILE$\rangle$ $\langle$COMMAND$\rangle$ \\
-   $\langle$COMMAND$\rangle$ $\rightarrow$  \textcolor{red} {ID}  \textcolor{red} {=} $\langle$STATEMENT$\rangle$ \\
-   $\langle$COMMAND$\rangle$ $\rightarrow$  \textcolor{red} {ID}  \textcolor{red} {=} $\langle$SUBSTRING$\rangle$ \\
-   $\langle$COMMAND$\rangle$ $\rightarrow$  \textcolor{red} {EOL}  \\
-   $\langle$SUBSTRING$\rangle$ $\rightarrow$  \textcolor{red} {STRING}  \textcolor{red} {[} $\langle$SUBSTRING PARAMS$\rangle$ \textcolor{red} {]}  \textcolor{red} {EOL}  \\
-   $\langle$SUBSTRING$\rangle$ $\rightarrow$  \textcolor{red} {ID}  \textcolor{red} {[} $\langle$SUBSTRING PARAMS$\rangle$ \textcolor{red} {]}  \textcolor{red} {EOL}  \\
-   $\langle$SUBSTRING PARAMS$\rangle$ $\rightarrow$ $\langle$REAL E$\rangle$ \textcolor{red} {:} $\langle$REAL E$\rangle$ \\
-   $\langle$REAL E$\rangle$ $\rightarrow$  \textcolor{red} {ID}  \\
-   $\langle$REAL E$\rangle$ $\rightarrow \varepsilon$ \\
-   $\langle$REAL E$\rangle$ $\rightarrow$  \textcolor{red} {REAL}  \\
-   $\langle$PARAMS$\rangle$ $\rightarrow$ $\langle$ID$\rangle$ \\
-   $\langle$PARAMS$\rangle$ $\rightarrow$ $\langle$ID$\rangle$ \textcolor{red} {,} $\langle$PARAMS$\rangle$ \\
-   $\langle$WHILE$\rangle$ $\rightarrow$  \textcolor{red} {while} $\langle$STATEMENT$\rangle$ \textcolor{red} {EOL} $\langle$COMMAND$\rangle$ \textcolor{red} {end}  \textcolor{red} {EOL}  \\
-   $\langle$IF$\rangle$ $\rightarrow$  \textcolor{red} {if} $\langle$STATEMENT$\rangle$ \textcolor{red} {EOL} $\langle$COMMAND$\rangle$ \textcolor{red} {else}  \textcolor{red} {EOL} $\langle$COMMAND$\rangle$ \textcolor{red} {end}  \textcolor{red} {EOL}  \\
-   $\langle$FCE CALL$\rangle$ $\rightarrow$  \textcolor{red} {FCE-ID}  \textcolor{red} {(} $\langle$CALL PARAMS$\rangle$ \textcolor{red} {)}  \\
-   $\langle$CALL PARAMS$\rangle$ $\rightarrow$ $\langle$STATEMENT$\rangle$ \\
-   $\langle$CALL PARAMS$\rangle$ $\rightarrow$ $\langle$STATEMENT$\rangle$ \textcolor{red} {,} $\langle$CALL PARAMS$\rangle$ \\
-   $\langle$STATEMENT$\rangle$ Je řešen pomocí precedenční syntaktické nalýzy zdola nahoru. Zahrnuje veškeré výrazy, včetně volání funkcí. \\
+ 
 \newpage
 
 
-\newpage
-\section{Konečný automat lexikálneho analyzátoru}
+
 
 \newpage
 
@@ -151,3 +236,5 @@ architektúra, pri preklade bez ladiaciach informácií)
 
 \end{document}
 
+V opačném případě by v kalendáři událostí nebyla
+žádná naplánovaná událost.
