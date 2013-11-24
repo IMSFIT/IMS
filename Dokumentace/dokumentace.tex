@@ -31,7 +31,7 @@
 \section{Úvod}
 Táto dokumentácia sa zaoberá vývojom, implementáciou a testovaním systéum hromadnej obsluhy "Štátna volebná infraštruktúra", ktorá simuluje volebný systém v Českej republike zahrňujúci voľby v okrskov a krajských mestskách a následne odoslanie a počítanie hlasov v informačnom centre.
 \indent
-Na základe modelu a simulácie bude ukázané chovanie systému so zreteľom na ukázanie slabých miest pri voľbách.
+Na základe modelu a simulácie bude ukázané chovanie systému so zreteľom na ukázanie slabých miest pri voľbách. Tento projekt môže byť použitý na optimalizáciu systému voliev v Českej republike vzhľadom na zrychlénie celého systému počítania hlasov a rozdelenie do okrskov.
 
 \subsection{Autori}
 Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci autori:
@@ -41,8 +41,13 @@ Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci 
 \end{itemize}
 
 Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom doktorom Hrubým(konzultácia ohľadne správnosti nášho návrhu Petriho siete).
+
+\subsection{Testovacie prostredie}
+Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
+
 \subsection{Validita}
 Experimentovaním sme overovali validitu modelu, ktoré vo forme histogramu a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsoboe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
+
 \subsection{Zadanie}
 Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
 Obsah je dostupný online z nasledujúceho odkazu: http://perchta.fit.vutbr.cz:8000/vyuka-ims/31.\cite{Prokop:Algoritmy}
@@ -59,11 +64,17 @@ Ciele projektu zahŕňajú:
 
 
 \section{Rozber témy a použitých technológií}
-Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. Ďalej treba spomenúť, že kód v C++ je pomerne rýchly.
+
 \indent
-Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
+
 
 Pre zobrazenie výsledkov bola použitá trieda Histogram, ktorá je štandardnou súčasťou knižnice Simlib.
+
+
+\subsection{Popis použitých postupov}
+Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. Ďalej treba spomenúť, že kód v C++ je pomerne rýchly.
+
+
 
 \subsection{Pôvod použitých technológií}
 \begin{itemize}
@@ -129,79 +140,41 @@ oslabili.
 Odkaz:$http://is.muni.cz/th/108056/pravf-m-a2/Diplomova_prace.pdf$
 
 
-\subsection{Petriho sieť}
-Pre návrh Štátnej volebnej infrašktúry volieb v Českej republike a návrhom komkrétneho spôsobu volieb bol použití deklaratívny model na popis abstraktných modelov Petriho sieť:
-$
-\sum = \langle P,T,F,W,C, M_o \rangle
-$
-\begin{itemize}
-\item P je množina miest
-\item T je množina stavov
-\item F je incidenčná relácia: F $\subseteq \langle P x T \rangle \cup \langle T x P \rangle$ 
-\item W: F $\rightarrow \{ 1,2, \dots \}  $
-\item $C: P \rightarrow N$ kapacita miest
-\item $M_o$ počiatočné značenie $M_o: P \rightarrow N$
-\end{itemize}
-\section{Algoritmus simulácie v Simlibe}
-\begin{verbatim}
-while(kalendář neprázdný)
-vyber první událost z kalendáře událostí
-if(čas události > konečný čas simulace)
-simulace končí
-end if
-nastav aktuální čas simulace na čas právě zpracované události
-vykonej časovaný přechod daný událostí
-vykonej všechny nečasované přechody a nastav časové přechody
-opakuj znova
-\end{verbatim}
-
-Tento algoritmus tvorí základný beh pre simuláciu modelu v Simlib.
-Ešte pred spustením cyklu je potrebné previesť pokus o vykonanie všetkých nečasovaných prechodov a načasovanie časovaných vykonateľných prechodov.
-
-
-\subsubsection{Základné prvky upraveného stochatistického Petriho siete}
-\begin{itemize}
-\item Miesto(Place) je zhromaždisko či sklad značiek, ktoré môže disponovať kapacitou, teda limitom pre počet vložených značiek. Implicitne je kapacita neobmedzená. Miesto disponuje zoznamom vstupných a výstupných hrán, ktoré ho spájajú s okolitými komponentmi. Značky môžu byť vložené ako pred započnutím simulácie, tak aj v jej priebehu.
-\item Prechod(Transition) disponuje rovnako ako miesto zoznamom vstupných a výstupných hrán. Prechod spravidla demonštruje prevedenie nejaké operácie. Popisovaný simulátor disponuje 6 druhmi prechodov:
-\begin{itemize}
-\item prioritný prechod
-\item pravdepodobnostný prechod
-\item časovaný prechod s konštantným spomalením
-\item časovaný prechdod s exponenciálnym spomalením
-\item časovaný prechdod s poissonovým spomalením
-\item časovaný prechdod s rovnomerným spomalením
-\end{itemize}
-
-\item Hrana(Arc) slúži na prepájanie prechodov a miest. Môže disponovať váhou (ohodnotením hrany, ktorá určuje počet značiek, s ktorými bude hrana pracovať. Implicitná váha hrany je 1.
-\item Značka(token) je hybnou silou Petriho sietí. Značky sú presúvané medzi miestami, čím je simulovaná určitá činnosť.
-\end{itemize}
-
-\subsection{Príklad Petriho siete}
-Petriho sítě jsou nejčastěji zobrazovány formou grafu. Kruhy demonstrují místa, obdélníky přechody,
-orientované šipky hrany a kruhy značky na jednotlivých místech.
-\begin{figure}
-\center{
-\includegraphics[scale=0.7]{img/petri.eps}}
-\end{figure}
 
 
 
-\section{Tvorba modelu Petriho siete pre štátnu volebnú infraštruktúru}
-Jedným z dôležitých problémov, ktoré sme museli riešiť, bola implementácia rekurzívneho volania funkcií. Pokiaľ je funkcia zavolaná viac než raz (prebieha rekurzia), vytvorí sa kópia všetkých premenných a parametrov danej funkcie v jej lokálnej tabuľke symbolov a zaradí sa na začiatok zoznamu, do ktorých patrí. To zaručí, že pri vyhľadávaní premennej v tabuľke je vždy nájdená jej najnovšia inštancia a zároveň, že ostatné inštancie patriace predchádzajúcim volaniam nebudú stratené. Jednotlivé bunky tabuľky teda fungujú ako zásobníky, u~ktorých sa pracuje so skupinou premenných na vrchole. Pri návrate z funkcie sú kópie premenných najbližšie vrcholu "zásobníku" odstránené.
+\section{Koncepce - modelářska témata}
 
-\subsection{Rozšírenie \emph{FUNEXP}}
+//treba dopisovat
+
+\subsection{Opis konceptuálneho modelu}
+
+
+\subsection{Forma konceptuálneho modelu}
+
+
+\subsection{Implementácia}
 Vzhľadom na koncepciu našeho interpretu sme sa rozhodli implementovať rozšírenie \emph{FUNEXP}. Vďaka nemu je interpret schopný spracovávať funkcie ako súčasť výrazov a tak isto výrazy použité, ako parametre funkcií. Jeho implementácia bola možná vďaka tomu, že parametre funkcií a tiež ich návratová hodnota sú predávané pomocou zásobníku interpretu. Preto je možné s týmito hodnotami pracovať pred a po volaní funkcie a počítať s nimi ako so súčasťou výrazov.
+
+
+
+
+\section{Architektura simulačního modelu}
+\newpage
+
+
+\section{Podstata simulačných experimentov}
+
+\section{Zhrnutie simulačných experimentov a záver}
 
 \subsection{Testovanie}
 Testovanie nášho projektu prebiehalo na architektúrach Windows a Linux. Bolo založené na vopred napísaných testoch, ktoré porovnávali jednotlivé výsledky testovanej časti s~referenčnými. Testovanie spočiatku prebiehalo po častiach, tak ako boli postupne implementované jednotlivé časti intepretu.
 V~konečnej fáze boli vykonané komplexné testy, ktoré overili funkčnost nášho interpretu jazyka \emph{IFJ12} podľa špecifikácie uvedenej v~zadaní. V~prípade, že bola objavená chyba počas testovania, táto chyba bola ihneď odstránená a interpret bol opäť dôkladne otestovaný.
-\newpage
-\section{Záver}
-Výsledný simulátor systému štátnej volebnej infraštruktúry na základe stochatistického modelu Petriho siete.
+
 
 \subsection{Štatistiky}
 \newpage
-\section{Zhrnutie simulácií a záver}
+
 
  
 \newpage
@@ -218,25 +191,5 @@ Výsledný simulátor systému štátnej volebnej infraštruktúry na základe s
 
 \bibliography{dokumentace}
 \newpage
-\section{Metriky kódu}
-
-\paragraph{Počet funkcií:} 97 funkcií
-\paragraph{Počet súborov:} 19 súborov
-\paragraph{Počet riadkov:}
-\begin{itemize}
-\item	  samotný kód:3240
-\item	  kód a komentáre:501
-\item	  samostatné komentáre:1248
-\item	  celkom:4989
-\end{itemize}
-\paragraph{Počet riadkov zdrojového textu:} 982  riadkov
-\paragraph{Veľkost statických dát:} 7696B
-\paragraph{Veľkosť spustiteľného suboru:} 96.7 kB (systém Fedora, 64 bitová
-architektúra, pri preklade bez ladiaciach informácií)
-
-\newpage 
-
 \end{document}
 
-V opačném případě by v kalendáři událostí nebyla
-žádná naplánovaná událost.
