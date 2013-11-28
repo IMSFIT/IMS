@@ -64,7 +64,7 @@ public:
     void Behavior(){
         int cv = okrsek->get_poctu_zvolenych_listku();
         okrsek->increment_lidi_v_mistnosti();
-        std::cout <<"Volic prichazi do okr: " <<okrsek->get_cislo_okrsku() <<"cislo volice: "<<cv <<std::endl;
+        std::cout <<"V prichazi do okr: " <<okrsek->get_cislo_okrsku() <<"c_v: "<<cv <<std::endl;
         // Zabrani clena komise
         Enter(*(okrsek->get_komise()), 1);
         Wait(Exponential(0.5));     //overovani volice 
@@ -79,7 +79,7 @@ public:
         Release(*(okrsek->get_urnu())); //uvolnuje urnu
         okrsek->decrement_lidi_v_mistnosti();
         //odchazi ze systemu
-        std::cout <<"Volic odchazi do okr: " <<okrsek->get_cislo_okrsku() <<"cislo volice: "<<cv <<std::endl;
+        std::cout <<"V odchazi do okr: " <<okrsek->get_cislo_okrsku() <<"c_v: "<<cv <<std::endl;
     }
 };
 
@@ -91,7 +91,7 @@ class PocitaniKonkretnihoHlasu: public Process{
         PocitaniKonkretnihoHlasu(Okrsek* o) : okr(o){}
         void Behavior(){
             int cl = okr->get_poctu_zvolenych_listku();
-            std::cout <<"start pocitani listku c.: " <<cl <<std::endl;
+            std::cout <<"start poc l c.: " <<cl <<std::endl;
             Enter(*(okr->get_komise()),1); //zabere se 1 clovek pro 1 hlas
             Wait(Uniform(1/4.0,1/2.4));        //clen pocita hlas
             Leave(*(okr->get_komise()),1); //clen se uvolni
@@ -100,7 +100,7 @@ class PocitaniKonkretnihoHlasu: public Process{
                 okr->increment_nep_listku();
             else
                 okr->increment_plat_listku();
-            std::cout <<"konec pocitani listku c.: " <<cl <<std::endl;
+            std::cout <<"kon poc l. c.: " <<cl <<std::endl;
         }
 };
 
@@ -130,7 +130,10 @@ class PocitaniHlasu : public Process{
         Okrsek* okr;
     public:
         PocitaniHlasu (Okrsek *o) : okr(o){}
-        void Behavior(){
+        void Behavior(){           
+            Stat statistika;
+            double cas = Time;
+            statistika(cas);
             int nespravne_pocitano = 1;
             //zjistujeme jeslti komise musi vysledky pocitat znovu
             while (nespravne_pocitano){
@@ -153,6 +156,8 @@ class PocitaniHlasu : public Process{
                     okr->get_nul_prepoctenym_listkum();
                 }
             }
+            std::cout <<"statistika okr. c. :" <<okr->get_cislo_okrsku() <<std::endl;
+            statistika.Output();
             
             Seize(Centrum_republiky);   //posilani vysledku na centrum
             Wait(1.0/30);               //posilani do centra
@@ -333,7 +338,7 @@ public:
         test = fscanf(soubor,"%d",&celkovy_pocet_okresku);
         if (test != 1)
             fprintf(stderr,"chyba pri nacitani");
-        //celkovy_pocet_okresku = 1;
+        celkovy_pocet_okresku = 2;
         //cyklus, ktery bude generovat tridy okresku
         for ( ; i <= celkovy_pocet_okresku ; ++i){
             test = fscanf(soubor,"%d%s%s%d",&c_k,k,m,&p_v);
