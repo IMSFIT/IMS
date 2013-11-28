@@ -4,7 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int doba_voleb = 50*60;  //celkova doba volicu
+const int doba_voleb = 14*60;  //celkova doba volicu
+const int celkova_doba_voleb = 24*60;  //doba casu simulace
+
+Facility Centrum_republiky("Volebni centrum");
+
 
 
 class GenVolicu;
@@ -19,7 +23,11 @@ private:
     char kraj[20];
     char mesto[20];
     int pocet_volicu;
+    int spoctene_hlasy;
     int pocet_zvolenych_listku;
+    int poc_nep_listku;
+    int poc_plat_listku;
+    int lide_v_mistnosti;
     Store *komise;
     Store *plenty;
     Facility *urna;
@@ -29,11 +37,22 @@ public:
     int get_cislo_okrsku();
     int get_poctu_volicu();
     int get_poctu_zvolenych_listku();
+    int get_spocitano_v_okrsku();
+    int get_konec_voleb();
+    int get_konec_pocitani_hlasu();
+    int get_lide_v_mistnosti();
     Store* get_komise();
     Store* get_plentu();
     Facility* get_urnu();
     void increment_poc_listku();
+    void decrement_poc_lisktu();
+    void increment_nep_listku();
+    void decrement_lidi_v_mistnosti();
+    void increment_lidi_v_mistnosti();
+    void increment_plat_listku();
+    void get_nul_prepoctenym_listkum();
     void konec_voleb();
+    void konec_pocitani_hlasu();
 };
 
 class Volic : public Process
@@ -43,6 +62,9 @@ private:
 public:
     Volic(Okrsek *o) : okrsek(o){}
     void Behavior(){
+        int cv = okrsek->get_poctu_zvolenych_listku();
+        okrsek->increment_lidi_v_mistnosti();
+        std::cout <<"Volic prichazi do okr: " <<okrsek->get_cislo_okrsku() <<"cislo volice: "<<cv <<std::endl;
         // Zabrani clena komise
         Enter(*(okrsek->get_komise()), 1);
         Wait(Exponential(0.5));     //overovani volice 
@@ -55,18 +77,87 @@ public:
         Seize(*(okrsek->get_urnu()));   //zabere urnu
         Wait(Exponential(1.0/30));        //vhazuje listek do urny
         Release(*(okrsek->get_urnu())); //uvolnuje urnu
+        okrsek->decrement_lidi_v_mistnosti();
         //odchazi ze systemu
+        std::cout <<"Volic odchazi do okr: " <<okrsek->get_cislo_okrsku() <<"cislo volice: "<<cv <<std::endl;
     }
 };
 
-class TimerVoleb : public Process{
+
+class PocitaniKonkretnihoHlasu: public Process{
     private:
         Okrsek* okr;
     public:
-        TimerVoleb (Okrsek *o) : okr(o){}
+        PocitaniKonkretnihoHlasu(Okrsek* o) : okr(o){}
         void Behavior(){
-            Wait(doba_voleb);
-            okr->konec_voleb();
+            int cl = okr->get_poctu_zvolenych_listku();
+            std::cout <<"start pocitani listku c.: " <<cl <<std::endl;
+            Enter(*(okr->get_komise()),1); //zabere se 1 clovek pro 1 hlas
+            Wait(Uniform(1/4.0,1/2.4));        //clen pocita hlas
+            Leave(*(okr->get_komise()),1); //clen se uvolni
+            
+            if (Random() < 0.0005)      //testuje platnost a neplatnost listku
+                okr->increment_nep_listku();
+            else
+                okr->increment_plat_listku();
+            std::cout <<"konec pocitani listku c.: " <<cl <<std::endl;
+        }
+};
+
+
+class GenHlasu : public Event{
+    private:
+        Okrsek* okr;
+    public:
+        GenHlasu(Okrsek* o) : okr(o){}
+        void Behavior(){
+            (new PocitaniKonkretnihoHlasu(okr))->Activate();
+            //snizime pocet nezpracovanych listku
+            okr->decrement_poc_lisktu();
+            //testuje se zdali je co pocitat
+            if(okr->get_poctu_zvolenych_listku() > 0){
+                //aktivovani dalsiho pocitani listku v nulovem case
+                Activate(Time);
+            }
+            else{
+                okr->konec_pocitani_hlasu();
+            }
+        }
+};
+
+class PocitaniHlasu : public Process{
+    private:
+        Okrsek* okr;
+    public:
+        PocitaniHlasu (Okrsek *o) : okr(o){}
+        void Behavior(){
+            int nespravne_pocitano = 1;
+            //zjistujeme jeslti komise musi vysledky pocitat znovu
+            while (nespravne_pocitano){
+                
+                (new GenHlasu(okr))->Activate();
+                //testuje se co minuta jeslti je vse spocteno
+                for (int i = Time ; i < celkova_doba_voleb ; ++i ){
+                    if (okr->get_konec_pocitani_hlasu())
+                        i = celkova_doba_voleb;
+                    else
+                        Wait(1);
+                }
+                Wait(Exponential(30));      //prijeti na urad a schvaleni vysledku
+                
+                if (Random() < 0.999) {         //vysledky souhlasi
+                    nespravne_pocitano = 0;  //muze se posilat do centra
+                }
+                else{
+                    
+                    okr->get_nul_prepoctenym_listkum();
+                }
+            }
+            
+            Seize(Centrum_republiky);   //posilani vysledku na centrum
+            Wait(1.0/30);               //posilani do centra
+            Release(Centrum_republiky); //uvolneni centra
+            
         }
 };
 
@@ -79,34 +170,75 @@ public:
     GenVolicu(Okrsek *o) : okrsek(o) , prum_lidi((double)doba_voleb/okrsek->get_poctu_volicu()){}
 
     void Behavior(){
-        (new Volic(okrsek))->Activate();
-        okrsek->increment_poc_listku();
-        if (okrsek->get_poctu_volicu() != okrsek->get_poctu_zvolenych_listku())
-            Activate(Time + Exponential(prum_lidi));
-        else
-            okrsek->konec_voleb();
+        //kdyz uz vyprsel cas, volici uz nesmeji vejit do volebni komise
+        if (!okrsek->get_konec_voleb()){
+            
+            (new Volic(okrsek))->Activate();
+            okrsek->increment_poc_listku();
+            if (okrsek->get_poctu_volicu() != okrsek->get_poctu_zvolenych_listku())
+                Activate(Time + Exponential(prum_lidi));
+            else
+                okrsek->konec_voleb();
+        }
     }
+};
+
+class TimerVoleb : public Process{
+    private:
+        Okrsek* okr;
+    public:
+        TimerVoleb (Okrsek *o) : okr(o){}
+        void Behavior(){
+            int i;
+            
+            /*****zacatek prichodu volicu****/
+            //Time = 0
+            //po kazde minute se testuje jestli neprisli vsichni volici
+            for (i = 0 ; i < doba_voleb ; ++i){
+                //prisli vsichni volici cyklus bude koncit
+                if (okr->get_konec_voleb()){
+                    //std::cout <<"tu jsem este nebyl" <<std::endl;
+                    i = doba_voleb;
+                }
+                else
+                    Wait(1);
+            }
+            okr->konec_voleb();
+            //ceka se az vsichni volici vyjdou z mistnosti co minutu se na ne ceka
+            while (okr->get_lide_v_mistnosti()){
+                Wait(1);
+            }
+            /************konec prichodu volicu*******/
+            std::cout <<"konec chozeni volicu" <<std::endl;
+            //rozjede se pocitani v komisi okrsku
+            (new PocitaniHlasu(okr))->Activate();
+        }
 };
 
 
 /************ definovani metod tridy okresek ********************/
-Okrsek::Okrsek(int c,int c_o,char *k,char *m,int p_v) : end_voleb(0),cislo_okrsku(c), cislo_kraje(c_o),
-    pocet_volicu(p_v),komise(new Store("Komise", 12)), plenty(new Store("Plenty", 3)),
-    urna(new Facility("Urna")){
+Okrsek::Okrsek(int c,int c_o,char *k,char *m,int p_v) : end_voleb(0), 
+    cislo_okrsku(c), cislo_kraje(c_o), pocet_volicu(p_v),spoctene_hlasy(0),
+    lide_v_mistnosti(0),komise(new Store("Komise", 12)),
+    plenty(new Store("Plenty", 3)),urna(new Facility("Urna")){
+    
     //zkopirujeme parametry
     strcpy(kraj,k);
     strcpy(mesto,m);
     pocet_zvolenych_listku = 0;
     //aktivujeme generator volicu
     (new GenVolicu(this))->Activate();
-    //aktivuje timer, ktery zjistuje jestli ubehla doba voleb
+    //zacina prepocitavani halsu v tomto okrsku
     (new TimerVoleb(this))->Activate();
-    
-    
+    //konec veskereho ziti okrsku....spocitane halasy a jsou zkontrolovany a vyslany do onech mist Centra voleb
 }
 
 int Okrsek::get_cislo_okrsku(){
     return cislo_okrsku;
+}
+
+int Okrsek::get_spocitano_v_okrsku(){
+    return spoctene_hlasy;
 }
 
 int Okrsek::get_poctu_volicu(){
@@ -116,6 +248,19 @@ int Okrsek::get_poctu_volicu(){
 int Okrsek::get_poctu_zvolenych_listku(){
     return pocet_zvolenych_listku;
 }
+
+int Okrsek::get_konec_voleb(){
+    return end_voleb;
+}
+
+int Okrsek::get_konec_pocitani_hlasu(){
+    return spoctene_hlasy;
+}
+
+int Okrsek::get_lide_v_mistnosti(){
+    return lide_v_mistnosti;
+}
+
 
 Store* Okrsek::get_komise(){
     return komise;
@@ -133,9 +278,43 @@ void Okrsek::increment_poc_listku(){
     ++pocet_zvolenych_listku;
 }
 
+void Okrsek::decrement_poc_lisktu(){
+    --pocet_zvolenych_listku;
+}
+
+void Okrsek::increment_lidi_v_mistnosti(){
+    ++lide_v_mistnosti;
+}
+
+void Okrsek::decrement_lidi_v_mistnosti(){
+    --lide_v_mistnosti;
+}
+
+void Okrsek::increment_nep_listku(){
+    ++poc_nep_listku;
+}
+
+void Okrsek::get_nul_prepoctenym_listkum(){
+    //nastavime hodnotu nezpocitanych zvolenych listku na puvodni stav
+    pocet_zvolenych_listku = poc_nep_listku + poc_plat_listku;
+    poc_nep_listku = 0;
+    poc_plat_listku = 0;
+}
+
+
+void Okrsek::increment_plat_listku(){
+    ++poc_plat_listku;
+}
+
+
 void Okrsek::konec_voleb(){
     end_voleb = 1;
 }
+
+void Okrsek::konec_pocitani_hlasu(){
+    spoctene_hlasy = 1;
+}
+
 
 
 /************ konec definovani metod tridy okresek *************/
@@ -154,8 +333,9 @@ public:
         test = fscanf(soubor,"%d",&celkovy_pocet_okresku);
         if (test != 1)
             fprintf(stderr,"chyba pri nacitani");
+        //celkovy_pocet_okresku = 1;
         //cyklus, ktery bude generovat tridy okresku
-        for ( ; i < celkovy_pocet_okresku ; ++i){
+        for ( ; i <= celkovy_pocet_okresku ; ++i){
             test = fscanf(soubor,"%d%s%s%d",&c_k,k,m,&p_v);
             //vynikla-li chyba pri nacitani ze souboru
             if (test == 1)
@@ -170,12 +350,13 @@ int GenOkrsku::i = 1;
 
 int main(void){
 
-    Init(0, 1);
+    Init(0, celkova_doba_voleb);
     
     (new GenOkrsku)->Activate();
 
     Run();
+    
 
-    std::cout <<"celkovy" <<std::endl;
+    Centrum_republiky.Output();
 
 }
