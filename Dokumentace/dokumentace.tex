@@ -144,17 +144,17 @@ Odkaz:$http://is.muni.cz/th/108056/pravf-m-a2/Diplomova_prace.pdf$
 
 
 \section{Koncepce - modelářska témata}
+Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury. 
 
-//treba dopisovat
 
 \subsection{Opis konceptuálneho modelu}
-
+ 
 
 \subsection{Forma konceptuálneho modelu}
 
 
 \subsection{Implementácia}
-Vzhľadom na koncepciu našeho interpretu sme sa rozhodli implementovať rozšírenie \emph{FUNEXP}. Vďaka nemu je interpret schopný spracovávať funkcie ako súčasť výrazov a tak isto výrazy použité, ako parametre funkcií. Jeho implementácia bola možná vďaka tomu, že parametre funkcií a tiež ich návratová hodnota sú predávané pomocou zásobníku interpretu. Preto je možné s týmito hodnotami pracovať pred a po volaní funkcie a počítať s nimi ako so súčasťou výrazov.
+Program pracuje na základním procesu, který regeneruje v čase nula objekty reprezentující okrsky České republiky. Při vytvoření objektu jednotlivého okrsku se nainicializují data. Objekt reprezentující okresek po inicializaci spustí po sobě jdoucí 2 procesy. První z nich je proces, který po svém vzniku začne generovat procesy příchodů voličů do volební místnosti. Druhý z procesů vytvoří časovač, který udává legální délku voleb. Po uplynutí určeného času na příchod voličů tento proces vytvoří nový proces. Nově vytvořený proces se stará o počítání jednotlivých volebních lístků ve volební místnosti, dále simuluje kontrolu výsledků a taky posílání správně vypočtených výsledků do Volebního centra České Republiky. Problém počítání jednotlivých volebních lístků řeší pomocí procesu na generování procesu počítání volebního lístku. V případě, že po spočítání výsledků se zjistí, že nastala chyba v počtech, proces zopakuje počítání volebních lístků znovu. 
 
 
 
