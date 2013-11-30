@@ -1,9 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Dokumentacia k projektu z IFJ
-%% Autor: Martin Maga,Vit Mojzis, Viktor Malik, Vojtech Meca,Jiri Macku 
-%% Datum: 27.11.2012
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt,a4paper,titlepage,final]{article}
@@ -94,61 +91,55 @@ voľby tajným hlasovaním na základe všeobecného, rovného a priameho
 práva, podľa zásad pomerného zastúpenia. Ďalším dôleţitým zákonom je 
 zákon č. 247/1995 Sb., o voľbách. Niektoré ustanovenia sú prevedené 
 vyhláškou č. 233/2000 Sb. Tieto právne pramene sú základnými právnymi 
-prameňmi v oblasti volieb v ČR. 
- 
-Volebný systém za posledné roky pršiel určitými zmenami, jednou 
-z nich bola zmena po voľbách v roku 1998. Zmena bola uzákonená v roku 
-2000 na základe dohody ODS a ČSSD. Cieľom malo byť posilnenie 
-stability a eliminácia vplyvu malých strán. Výsledkom tejto reformy bol 
-pomerný systém, 35 volebných obvodov, v ktorých bola v jednom skrutíniu 
-aplikovaná D 'Hontova formula.19
- Prezident Václav Havel šak nesúhlasil 
-s polnením vetšinových prvkov vo volebnom systéme a navrhol Ústavnému 
-súdu zrušenie zmien. Nálezom Ústavného súdu č. 64/2001 Sb. bola vetšina 
-zmien zrušená. Ústavný súd argumentoval názorom, ţe došlo k vzájomnej 
-kombinácii vetšinových prvkov a to narušuje ústavný príkaz pomerného 
-zastúpenia v PS ČR. Vzhľadom k politickému rozloţeniu síl došlo k prijatiu 
-nového zákona, ktorý si vyslúţil značnú kritiku od odbornej verejnosti. 
-Štruktúra celého zákona prešla zmenou, zmenili sa velkosti obvodov, 
-volebná formula, uzatváracia klauzula, počet aj charakter skrutínií. Pôvodná 
-Hagenbach-Bischoffova volebná formula sa zmenila na D'Hotntovú. 
- 
-19
- Novák M., Lebeda T. a kol., Volební a stranické systémy. ČR v mezinárodním srovnání, 
-Dobrá Voda: Vydavatelství a nakladatelství Aleš Čeněk, 2004, s. 231 
-  34
-D'Hontov deliteľ sa tak po vzore v celom svete s pomerným zastúpením 
-dostal aj do českého zákona o voľbách. Uzatvárajúca klauzula ostala 
-nezmenená, t.j. 5 \%, čo však neplatí pre koalície, kde sa priamo úmerne 
-zvyšuje podľa počtu koaličných strán (zo 7 \% na 10 \%, z 9 \% na 10 \%, z 10 
-\% na 20 \%). Počet skrutínií sa zmenšil z dvoch na jedno. D'Hontov deliteľ 
-rozdeľuje všetky mandáty priamo na základe volebných obvodov, preto 
-druhé skrutínium stratilo opdstatnenie.20
- Najvýznamnejšia bola ale zmena 
-veľkosti volebných obvodov. Z pôvodných ôsmich vzniklo štrnásť , ktoré sú 
-identické s krajským samosprávnym delením.21
- Kandidátske listiny ostali 
-ako listiné, kde poradie kandidátov určuje politická strana. Volič má však 
-právo na posun kandidáta na listine pomocou preferenčného hlasu, kde 
-z pôvodných 4 došlo k zmene na 2 preferenčné hlasy. 
- 
-Zmenou volebného zákona došlo k posílneniu dvoch veľkých strán, 
-avšak na druhej strane sa do parlamentu dostala aj relatívne malá Strana 
-Zelených. Strany uprostred politického záujmu na základe tejto reformy 
-oslabili. 
+prameňmi v oblasti volieb v ČR.\cite{Seda:Voleb}
 
-Odkaz:$http://is.muni.cz/th/108056/pravf-m-a2/Diplomova_prace.pdf$
+Voľby prebiehajú štandardne každé 4 roky, alebo po po predčasných voľbách. Každému občanovi republiky prislúcha 1 volebný hlas, ktorý musí odovzdať. Každý občas patrí pod istý volebný kraj, ktorý sa delí na menšiu časti zvané okrsky. Voľby prebiehajú štandardne v sobotu alebo v nedeľu dokopy 14 hodín. Každý občan, ktorý spĺňa podmienky príde v mieste svojho bydliska do volebnej miestnosti, kde sa preukáže platnosti dokladom totožnosti volebnej komisii, ktorá skontroluje údaje a povolí občanovi voliť. Každý občan ide jednotlivo za urnu, kde zaškrtne možnosť a následne vhodí svoj hlas do urny a zvyšné zahadzuje.
+
+Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na obecný úrad, odkiaľ sa posielalu na prepočítanie do lebného centra.
+
+  
+
+
 
 
 
 
 
 \section{Koncepce - modelářska témata}
-Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury. 
+Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury.\newpage 
+\begin{figure}[h]
 
+\begin{center}
+
+\includegraphics[scale=0.7]{img/konceptualni_model.eps} 
+\caption{Konceptuálny model}
+\label{koncept}
+
+\end{center}
+
+\end{figure}
+
+\newpage
 
 \subsection{Opis konceptuálneho modelu}
  
+
+\newpage 
+\begin{figure}[h]
+
+\begin{center}
+
+\includegraphics[scale=0.4]{img/Petri.eps} 
+\caption{Konceptuálny model}
+\label{koncept}
+
+\end{center}
+
+\end{figure}
+
+Obrázok popisuje Petriho sieť, ktorá ukazujem systém volieb. Ukazuje príchod voliča, odvolenie voliča. Na začiatku sa vygenerujú voliči, ktorí prijdu do volebnej miestnosti. Pri vstupe do miestnosti si občan zabere člena volebnej komisie, ktorý je reprezentovaný štruktúrou "Store" s kaúacitou 10 v Simlibe. Pokiaľ nie je voľný nejaký člen volebnej komisie, tak si občan zabere frontu podľa minimálnej dĺžky. Pokiaľ sa občan dostane na rad, tak ho člen volebnej komisie skontroluje. To trvá 20 sekúnd. V prípade, že občan má občiansky tak môže pokračovať vo voľbách. V opačnom prípade(1\,\%) užívateľ odchádza. Inak občan pokračuje ďalej. Zabere si "Store" s kapacitou 3, ktorí reprezentuje volebnú plentu. V prípade, že nie je volná plenta, tak sa občan zaradí do najkratšej fronty. Následne užívateľ zajde za plentu a zaškrtá výsledok. To trvá cca 10 sekúnd. Následne si zabere plentu, ktorá je len 1. Pokiaľ nie je voľná tak sa zaradí do fronty a čaká. Následne občan opúšťa systém.
+\newpage
+
 
 \subsection{Forma konceptuálneho modelu}
 
