@@ -1,7 +1,7 @@
 # vychozi obrazky
-SRC= konceptualni_model.jpg Petri.png
+SRC= konceptualni_model.jpg Petri.png petri2.png
 # pozadovany format pro LaTeX
-DEST=arcsin.eps logax.eps log_rada.eps tanh.eps tanh_vzorec.eps tay_cosh.eps tay_sinh.eps konceptualni_model.eps Petri.eps
+DEST=arcsin.eps logax.eps log_rada.eps tanh.eps tanh_vzorec.eps tay_cosh.eps tay_sinh.eps konceptualni_model.eps Petri.eps petri2.eps
 
 .SUFFIXES: .fig .eps .png .jpg
 

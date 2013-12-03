@@ -17,7 +17,7 @@ gen_okrsku: gen_okresu.c
 	$(c) -std=c99 -Wall -g -O2 gen_okresu.c -o gen_okresu
 	
 projekt: projekt_v4.cc
-	$(CXX) $(CXXFLAGS) projekt_v4.cc -o projekt  -lsimlib -lm 
+	$(CXX) $(CXXFLAGS) projekt_v4.cc -o projekt4  -lsimlib -lm 
 	
 pokus: pokus.cc
 	$(CXX) $(CXXFLAGS) pokus.cc -o projekt  -lsimlib -lm 

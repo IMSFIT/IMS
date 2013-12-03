@@ -185,7 +185,7 @@ private:
     Okrsek *okrsek;
     double prum_lidi;
 public:
-    GenVolicu(Okrsek *o) : okrsek(o) , prum_lidi((double)doba_voleb/okrsek->get_poctu_volicu()){}
+    GenVolicu(Okrsek *o) : okrsek(o) , prum_lidi((double)doba_voleb/okrsek->get_poctu_volicu()*0.5){}
 
     void Behavior(){
         //kdyz uz vyprsel cas, volici uz nesmeji vejit do volebni komise
