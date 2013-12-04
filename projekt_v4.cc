@@ -1,3 +1,9 @@
+/* Autor: Martin Maga, Vojtech Meca
+ * Loginy: xmagam00, xmecav00
+ * IMS Projekt c.9
+ * Datum: 4.12.2013
+ */
+
 #include "simlib.h"
 #include <iostream>
 #include <stdio.h>
@@ -16,6 +22,7 @@ Stat doba_cekani_na_centrum("doba cekani na centrum");
 class GenVolicu;
 class Volic;
 
+//trieda reprezentujuca okrsok
 class Okrsek
 {
 private:
@@ -61,6 +68,7 @@ public:
     void konec_pocitani_hlasu();
 };
 
+//trieda reprezentajuca volica
 class Volic : public Process
 {
 private:
@@ -112,7 +120,7 @@ class PocitaniKonkretnihoHlasu: public Process{
         }
 };
 
-
+//trieda na pocitanie hlasov
 class GenHlasu : public Event{
     private:
         Okrsek* okr;
@@ -251,6 +259,7 @@ Okrsek::Okrsek(int c,int c_o,char *k,char *m,int p_v) : end_voleb(0),
     //konec veskereho ziti okrsku....spocitane halasy a jsou zkontrolovany a vyslany do onech mist Centra voleb
 }
 
+//metody triedy okrsku
 int Okrsek::get_cislo_okrsku(){
     return cislo_okrsku;
 }
@@ -377,6 +386,8 @@ public:
 
 int GenOkrsku::i = 1;
 
+
+//hlavny cyklus simulacie
 int main(void){
 
     Init(0, celkova_doba_voleb);

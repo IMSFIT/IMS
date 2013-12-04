@@ -123,23 +123,24 @@ Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.\newpage
 
 \subsection{Opis konceptuálneho modelu}
  V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě:	
- 	a) Zaoblený obdelníček s názvem Generátor okrsků
+ \begin{itemize}
+\item 	a) Zaoblený obdelníček s názvem Generátor okrsků
  		 Tato zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
- 	b) Normální obdelníček s názvem Okrsek č. 1...n
+\item 	b) Normální obdelníček s názvem Okrsek č. 1...n
  		 Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
- 	c) Zaoblený obdelníček s názvem Generátor voličů
+\item 	c) Zaoblený obdelníček s názvem Generátor voličů
  		 Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
- 	d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
+\item 	d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
  		 Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
- 	e) Zaoblený obdelníček s názvem Proces konce chození voličů
+ \item	e) Zaoblený obdelníček s názvem Proces konce chození voličů
  		 Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
- 	f) Zaoblený obdelníček s názvem Proces počítání hlasů
+\item 	f) Zaoblený obdelníček s názvem Proces počítání hlasů
  		 Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
- 	g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
+\item 	g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
  		 Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
- 	h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
+\item 	h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
  		 Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
-
+\end{itemize}
 \newpage 
 \begin{figure}[h]
 
