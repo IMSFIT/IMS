@@ -106,7 +106,7 @@ Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na ob
 
 
 \section{Koncepce - modelářska témata}
-Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury.\newpage 
+Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.\newpage 
 \begin{figure}[h]
 
 \begin{center}
@@ -122,8 +122,25 @@ Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury.\newpage
 \newpage
 
 \subsection{Opis konceptuálneho modelu}
- 
-
+ V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě:	
+ \begin{itemize}
+\item 	a) Zaoblený obdelníček s názvem Generátor okrsků
+ 		 Tato zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
+\item 	b) Normální obdelníček s názvem Okrsek č. 1...n
+ 		 Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
+\item 	c) Zaoblený obdelníček s názvem Generátor voličů
+ 		 Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
+\item 	d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
+ 		 Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
+ \item	e) Zaoblený obdelníček s názvem Proces konce chození voličů
+ 		 Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
+\item 	f) Zaoblený obdelníček s názvem Proces počítání hlasů
+ 		 Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
+\item 	g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
+ 		 Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
+\item 	h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
+ 		 Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
+\end{itemize}
 \newpage 
 \begin{figure}[h]
 
@@ -137,7 +154,7 @@ Na obrázku č. ... je uvedeno schéma systému Volební infrastruktury.\newpage
 
 \end{figure}
 
-Obrázok popisuje Petriho sieť, ktorá ukazujem systém volieb. Ukazuje príchod voliča, odvolenie voliča. Na začiatku sa vygenerujú voliči, ktorí prijdu do volebnej miestnosti. Pri vstupe do miestnosti si občan zabere člena volebnej komisie, ktorý je reprezentovaný štruktúrou "Store" s kaúacitou 10 v Simlibe. Pokiaľ nie je voľný nejaký člen volebnej komisie, tak si občan zabere frontu podľa minimálnej dĺžky. Pokiaľ sa občan dostane na rad, tak ho člen volebnej komisie skontroluje. To trvá 20 sekúnd. V prípade, že občan má občiansky tak môže pokračovať vo voľbách. V opačnom prípade(1\,\%) užívateľ odchádza. Inak občan pokračuje ďalej. Zabere si "Store" s kapacitou 3, ktorí reprezentuje volebnú plentu. V prípade, že nie je volná plenta, tak sa občan zaradí do najkratšej fronty. Následne užívateľ zajde za plentu a zaškrtá výsledok. To trvá cca 10 sekúnd. Následne si zabere plentu, ktorá je len 1. Pokiaľ nie je voľná tak sa zaradí do fronty a čaká. Následne občan opúšťa systém.
+Obrázok popisuje Petriho sieť, ktorá ukazujem systém volieb. Ukazuje príchod voliča, odvolenie voliča. Na začiatku sa vygenerujú voliči, ktorí prijdu do volebnej miestnosti. Pri vstupe do miestnosti si občan zabere člena volebnej komisie, ktorý je reprezentovaný štruktúrou "Store" s kapacitou 12 v Simlibe. Pokiaľ nie je voľný nejaký člen volebnej komisie, tak se zařadí do společné fronty a čeká na uvolnění některého ze členů volební komise. Pokiaľ sa občan dostane na radu, tak ho člen volebnej komisie skontroluje. To trvá exponeniciálně 30 sekúnd. Po skončení kontroly občana členem volební komise, občan pokračuje ďalej. Zabere si "Store" s kapacitou 3, ktorý reprezentuje volebnú plentu. V prípade, že nie je volná plenta, tak sa občan zaradí do jedné společné fronty. Následne užívateľ zajde za plentu a zaškrtá výsledok. To trvá exponenciálně 15 sekúnd. Následne si zabere plentu, ktorá je len 1. Pokiaľ nie je voľná tak sa zaradí do fronty a čaká. Po vhození lístku reprezentující dobu exponenciálně 2 sekundy občan opúšťa systém.
 \newpage
 
 
@@ -151,6 +168,7 @@ Program pracuje na základním procesu, který regeneruje v čase nula objekty r
 
 
 \section{Architektura simulačního modelu}
+
 \newpage
 
 
