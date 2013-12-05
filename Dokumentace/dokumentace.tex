@@ -118,28 +118,27 @@ Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.\newpage
 \end{center}
 
 \end{figure}
-
 \newpage
 
 \subsection{Opis konceptuálneho modelu}
  V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě:	
  \begin{itemize}
 \item 	a) Zaoblený obdelníček s názvem Generátor okrsků
- 		 Tato zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
+\subitem	 Tento zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
 \item 	b) Normální obdelníček s názvem Okrsek č. 1...n
- 		 Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
+\subitem	 Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
 \item 	c) Zaoblený obdelníček s názvem Generátor voličů
- 		 Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
+\subitem	 Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
 \item 	d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
- 		 Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
+\subitem	 Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
  \item	e) Zaoblený obdelníček s názvem Proces konce chození voličů
- 		 Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
+\subitem	 Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
 \item 	f) Zaoblený obdelníček s názvem Proces počítání hlasů
- 		 Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
+\subitem	 Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
 \item 	g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
- 		 Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
+\subitem	 Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
 \item 	h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
- 		 Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
+\subitem	 Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
 \end{itemize}
 \newpage 
 \begin{figure}[h]
@@ -169,10 +168,26 @@ Program pracuje na základním procesu, který regeneruje v čase nula objekty r
 
 \section{Architektura simulačního modelu}
 
+\subsection{Popis architektury}
+V programu je několik tříd, které zajišťují jeho spávný průběh. 
+ \begin{itemize}
+\item Třída GenOkrsku
+\subitem Tato třída reprezentuje proces Generování okrsku z konceptuálního modelu na Obr. č. 1. Tato třída se dědí od třídy Event z knihovny SIMlib obsahuje pouze jednu metodu Behavior(). Metoda Behavior() ze začátku načítá první řádek ze souboru. V souboru na prvním řádku je informace o celkovém počtu okrsků. Dále pokračuje jedním cyklem, který při každém průchodu načítá data jednoho řádku ze souboru, což reprezentuje data určené právě pro jeden okrsek. Poté cyklus pokračuje vytvořením nového oběktu třídy Okrsek a posílá získané data ze souboru do jako parametry konstruktoru. Po vytvoření všech Oksrku, svou činnost končí.
+
+\item Třída Okrsek
+\subitem Tato třída reprezentuje objěkt Okrsek z konceptuálního modelu na Obr. č. 1. Tato třída má konstruktor a mnoho dalších metod na získávání, nastavování atributů třídy. Také tato třída obsahuje metody, které inkrementují nebo dekterentují některé atributy třídy. Třída je určena jako ukládání a uchovávání dat se kterými se během programu pracuje. V konstruktoru nainicializuje potřebné atributy. A po té vytvoří proces GenVolicu a předá mu parametr, jako ukazatele na sebe (pomocí ukazatele this). Poté vytváří podobně jako před tím další proces TimerVoleb. Předává mu do kontruktoru také ukazatel na sebe. Tím končí konstruktor této třídy.
+
+\item Třída GenVolicu
+\subitem Tato třída reprezentuje proces Generování voličů z konceptuálního modelu na Obr. č. 1. Tato tída se dědí od třídy Event z knihovny SIMlib a obsahuje konstruktor a metordu Behavior(). V konstruktoru se předá ukazatel z objěktu Okrsku ze kterého byl generátor vytvořen do svojeho atributu třídy Okrsku. Dále se taky zde definuje čas, který slouži pro znovu aktivovaní této třídy. Zde také měníme parametr účast volíčů pro celou ČR. V mětodě Behavior() se testuje jestli nenastal konec voleb. Zda-li nenastal, tak vytvoří objekt procesu voliče a předá mu parametr objektu Okrsek, ze kterého byla tato třída vytvořena. Inkrementuje počet generovaných voličů v okrsku a testuje jestli počet vygenerovaných voličů se rovná maximálního počtu voličů v daném okrsku, což je uloženo v atributu Okrsku s názvem pocet\_volicu. Pokud bylo vytvořeno méně voličů, tak se znovu tato třída aktivuje podle součtu času Time a času určeného v konsturuktoru. Ale pokud je vytvořeno stejně voličů jako maximální počet, tak se tato třída znovu neaktivuje, ale nastaví parametr end\_voleb třídy Okrsku na 1 a to pomocí metody konec\_voleb() v objektu Okrsek a tím ukončí dobu konce voleb daného okrsku. 
+
+
+\end{itemize}
+
 \newpage
 
 
 \section{Podstata simulačných experimentov}
+Hlavní cíl, proč byl model vytvořen, bylo zjistit vytíženost Volevního celorepublikového centra a navrhnout změny pro zefektivnění vytíženosti tohoto volebního centra. Ktomu nám pomáhali experimenty. 
 
 \section{Zhrnutie simulačných experimentov a záver}
 
