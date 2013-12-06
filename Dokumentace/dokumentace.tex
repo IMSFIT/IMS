@@ -43,7 +43,7 @@ Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom
 Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
 
 \subsection{Validita}
-Experimentovaním sme overovali validitu modelu, ktoré vo forme histogramu a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsoboe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
+Experimentovaním sme overovali validitu modelu, ktoré vo forme štatistik a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsoboe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
 
 \subsection{Zadanie}
 Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
@@ -57,6 +57,7 @@ Ciele projektu zahŕňajú:
 \item Analýza aktuálneho volebného systému v Českej republike
 \item Analýza slabých miest volebného systému
 \item Návrh efektívnejšieho prístupu, ktoré by dokázalo zvýšiť rýchlosť počítania hlasov
+\item Návrh co nejvíce reálného systému voleb v České republice 
 \end{itemize}
 
 
@@ -65,12 +66,11 @@ Ciele projektu zahŕňajú:
 \indent
 
 
-Pre zobrazenie výsledkov bola použitá trieda Histogram, ktorá je štandardnou súčasťou knižnice Simlib.
+Pre zobrazenie výsledkov bola použitá trieda Stat, ktorá je štandardnou súčasťou knižnice Simlib.
 
 
 \subsection{Popis použitých postupov}
-Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. Ďalej treba spomenúť, že kód v C++ je pomerne rýchly.
-
+Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. 
 
 
 \subsection{Pôvod použitých technológií}
@@ -121,24 +121,24 @@ Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.\newpage
 \newpage
 
 \subsection{Opis konceptuálneho modelu}
- V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě:	
+ V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě: 
  \begin{itemize}
-\item 	a) Zaoblený obdelníček s názvem Generátor okrsků
-\subitem	 Tento zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
-\item 	b) Normální obdelníček s názvem Okrsek č. 1...n
-\subitem	 Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
-\item 	c) Zaoblený obdelníček s názvem Generátor voličů
-\subitem	 Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
-\item 	d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
-\subitem	 Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
- \item	e) Zaoblený obdelníček s názvem Proces konce chození voličů
-\subitem	 Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
-\item 	f) Zaoblený obdelníček s názvem Proces počítání hlasů
-\subitem	 Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
-\item 	g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
-\subitem	 Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
-\item 	h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
-\subitem	 Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
+\item    a) Zaoblený obdelníček s názvem Generátor okrsků
+\subitem  Tento zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
+\item    b) Normální obdelníček s názvem Okrsek č. 1...n
+\subitem  Při vytvoření tohoto objektu  se nainicialzují hodnoty, které jsou získány z Generátoru okrsků a dále vytvoří si Generátor voličů a taktéž si vytvoří Proces konce chození voličů. Poté objekt slouží pouze pro ukládání hodnot, které se můžou během programu měnit.
+\item    c) Zaoblený obdelníček s názvem Generátor voličů
+\subitem  Po vytvoření Okrsekem začne generovat voliče, kteří jdou volit. Vytvoří jich podle parametru maximálního počtu voličů a dále taky podle parametru volební účast voličů. Po vygenerovaní všech voličů, zahlásí konec voleb, a tímto její činnost skončí. 
+\item    d) Zaoblený obdelníček s názvem Proces voliče č. 1 .. n
+\subitem  Je vytvořen Generátorem voličů. Po vytvoření simuluje všechny zásadní pokyny po správné odvolení voliče. Po samotném odvolení voliče proces končí.
+ \item   e) Zaoblený obdelníček s názvem Proces konce chození voličů
+\subitem  Je vytvořen Okrskem. Zapne v sobě časovač reprezentující dobu voleb. Po uplynutí časovače nebo po příchodu všech voličů v okrsku se vyvolá Proces počítání hlasů. Poté jeho činnost končí.
+\item    f) Zaoblený obdelníček s názvem Proces počítání hlasů
+\subitem  Vytváří Genreátor volibních lístků. Správně spočítáné výsledky posílá do Volebního centra. Poté jeho činnost končí.
+\item    g) Zaoblený obdelníček s názvem Proces generátor volebních lístků
+\subitem  Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
+\item    h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
+\subitem  Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
 \end{itemize}
 \newpage 
 \begin{figure}[h]
@@ -195,8 +195,6 @@ V programu je několik tříd, které zajišťují jeho spávný průběh.
 \item Třída PocitaniHlasu
 \subitem Tato třída reprezentuje Proces počítání hlasů z konceptuálního modelu na Obr. č. 1. Tato třída se dědí od třídy Process z knihovny SIMlib a obsahuje konstruktor a metordu Behavior(). V konstruktoru se předá ukazatel z atributu \textbf{okr} třídy TimerVoleb, ve kterém je uložen ukazatel na konkrétní okrsek. V metodě Behavior() se spustí cyklus, který testuje, zda-li má proběhnout počítání hlasů. Pokud ano, tak vytvoří proces GenHlasu a předá mu ukazatel na objekt Okrsek. Poté spustí cyklus, který končí v případě, že jsou vytvořeny všechny procesy třídy \textbf{PocitaniKonkretnihoHlasu}. Poté se spustí další cyklus, který kontroluje končí v případě, že jsou všechny lístky spočtené. Po nějaké době (pomocí Wait()) vyhodnotí, jestli výsledky jsou správné a nebo ne. Pokud výsledky správné nejsou, tak zavolá metodu \textbf{get\_nul\_prepoctenym\_listkum()}, která nastaví atributy \textbf{poc\_nep\_listku} a \textbf{poc\_plat\_listku} na 0 a atribut \textbf{pocet\_zvolenych\_listku} na původní hodnotu v objektu Okrsek. A cyklus pro vyhodnocení zda-li se mají výsledky počítat se spustí znovu. Pokud jsou výsledky správné, tak si proces třídy PocitaniHlasu zabere zařízení \textbf{Centrum\_republiky} pomocí SIMlib funkce \textbf{Seize}. Po uplynutí času reprezentující posílání výsledků do volebního centra republiky, se zařízení \textbf{Centrum\_republiky} pomocí SIMlib funkce \textbf{Releise} uvolní. Tím končí tento proces.
 
- 
-
 \end{itemize}
 
 
@@ -205,21 +203,28 @@ V programu je několik tříd, které zajišťují jeho spávný průběh.
 
 
 \section{Podstata simulačných experimentov}
-Hlavní cíl, proč byl model vytvořen, bylo zjistit vytíženost Volevního celorepublikového centra a navrhnout změny pro zefektivnění vytíženosti tohoto volebního centra. Ktomu nám pomáhali experimenty. 
+\subsection{Postup experimentování}
+Hlavní cíl, proč byl model vytvořen, bylo zjistit vytíženost Volevního celorepublikového centra a navrhnout změny pro zefektivnění vytíženosti tohoto volebního centra. Dále také jsme získávali informace o průběhu počítání hlasů pro jednotlivé kraje a pak pro celou republiku. K tomu nám pomáhali experimenty. Díky těmto experimentům jsme mohli dosáhnout validitu samotného modelu voleb. V experimentech jsme měnili parametr volební účasti, kdy jsme sledovali vytíženost volebního centra v závislosti na tomto parametru. Dále jsme takéž podle tohoto parametru sledovli, jak se chovají jednotlivé okrsky v délce počítání hlasů a v čekání na volební centrum. 
+\subsection{asi testy...ale podívej se na to...když tak to dáme do pryč}
+V prvotních experimentech jsme sledovali zda model funguje správně. Jedny z prvních experimentů jsme prováděli pouze na malém množství okresků. Vstupem byla 100\% účast voličů na 1 okrsek. Očekávaným výsledkem byly výpisy ve dvou skupinách. V prvním z nich jsme očekávali pouze výpisy příchodů a odchodů voličů a v druhém aktuální počítání všech volebních lístků. Po proběhnutí programu jsme vyčetli ze souboru, že počítání lístků probíhá již v čase, kdy voliči jsou v místnosti a ještě "volili". Proto jsme zavedli do třídy \textbf{Okrsek} atribut \textbf{lide\_v\_mistnosti}. Díky němu se nám podařilo zajistit, že počítání volibních lístků začne až všichni voliči odvolí a výjdou z místnosti. 
+Dále velmi podobným experimentem bylo zajištění správnosti přepočítávání volebních lístků, kdy se vyhodnotili, že jsou chybné. Experimentovali jsme tento problém na podobném principu jako v předchozím případě. Vstupem byla 100\% účast voličů na 1 okrsek a 40\% šance, že výsledky se budou muset znovu přepočítat. Očekávalo se, že ve výstupním souboru budou výpisy počítání všech volebních lístků alespoň 2 za sebou. Z výsledného souboru jsme zjistili, že při vytvoření všech volebních lístků se vyhodnotili výsledky po určité době čekání na ohodnocení správnosti volebních lístků bez toho, aby se počkalo na zpracování všech volebních lístků. Proto jsme vytvořili ve tříde třídy \textbf{Okrsek} atribut \textbf{prave\_pocitanych\_listku}. Díky tomuto atributu jsme zajistili, že v případě vyhodnocení lístků máme jistotu, že ani jeden z nich se už nepočítá. 
+\subsection{Popis experimentů}
+V dalších experimentech jsme se zaměřili pouze na vytíženost volebního centra. 
+Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2 sekund. Ve výsledných statistikách jsme zjistili 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. Obecně se na volební centrum nečekalo. \newline
+Dalším experimentem jsme chtěli zjistit zda-li se změní čekání okrsků na volební centrum když změníme volevní účast. Tu jsme si změnili na 175\%. Očekávali jsme delší fronty orksků na volební centrum. Výsledkem byla změna v průměru čekání volebních okrsků byla přibližně 2.1 sekundy. Maximální délka fronty byla 7 okrsků. \newline
+Toto nás dovedlo k názoru, že model volebního systému v ČR, který jsme vytvořili není tolik reálný. Změnili jsme čas zpracování výsledků na 6 sekundy. A reálnost systému jsme znovu ověřovali experimenty.
+\newline
+\newline
+tady bude ještě jeen experiment
+\newline
+\newline
+\subsection{Závěr experimentů}
+Bylo provedeno 7 experimentů na vytíženost centra. V průběhů experimentů byla odstraněna nereálná situace čekání orksků na volební centrum.
+
 
 \section{Zhrnutie simulačných experimentov a záver}
-
-\subsection{Testovanie}
-Testovanie nášho projektu prebiehalo na architektúrach Windows a Linux. Bolo založené na vopred napísaných testoch, ktoré porovnávali jednotlivé výsledky testovanej časti s~referenčnými. Testovanie spočiatku prebiehalo po častiach, tak ako boli postupne implementované jednotlivé časti intepretu.
-V~konečnej fáze boli vykonané komplexné testy, ktoré overili funkčnost nášho interpretu jazyka \emph{IFJ12} podľa špecifikácie uvedenej v~zadaní. V~prípade, že bola objavená chyba počas testovania, táto chyba bola ihneď odstránená a interpret bol opäť dôkladne otestovaný.
-
-
-\subsection{Štatistiky}
-\newpage
-
-
- 
-\newpage
+Naším hlavním cílem bylo vytvořit co nejvíce reálný model volebního systému. Proto jsme se striktně nerželi zadání a vyvořili jsme 997 okrsků. Také jsme zvažovali zda vytváření procesů volebních lístků je zbytečné. Ačkoli tato operace není příliš efektivní pro výpočet, pro reálnost systému je zásadní. Přístup k jednotlivým volebním lístkům je v praxi normální a proto i tento způsob v modelu jsme zachovali.\newline
+Díky sadě experimentů jsme zjitili, že model je vrámci školního projektu validní.
 
 
 
