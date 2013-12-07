@@ -1,11 +1,16 @@
+/* Projekt IMS
+ * Autori: Vojtech Meca, Martin Maga
+ * Loginy: xmecav00, xmagam00
+ * Zadanie c.9 - volebni infrastruktura
+ */ 
 #include "simlib.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-const int doba_voleb = 14*60;  //celkova doba volicu
-const int celkova_doba_voleb = 24*60;  //doba casu simulace
+const int doba_voleb = 14*60;  //celkova doba volicov
+const int celkova_doba_voleb = 24*60;  //doba casu simulacie
 
 Facility Centrum_republiky("Volebni centrum");
 
@@ -16,6 +21,7 @@ Stat doba_cekani_na_centrum("doba cekani na centrum");
 class GenVolicu;
 class Volic;
 
+//trieda pre Okrsok
 class Okrsek
 {
 private:
@@ -62,6 +68,7 @@ public:
     void konec_pocitani_hlasu();
 };
 
+//trieda Volica
 class Volic : public Process
 {
 private:
@@ -90,7 +97,7 @@ public:
     }
 };
 
-
+//trieda pre pocitanie hlasov
 class PocitaniKonkretnihoHlasu: public Process{
     private:
         Okrsek* okr;
@@ -213,7 +220,7 @@ class TimerVoleb : public Process{
         void Behavior(){
             int i;
             
-            /*****zacatek prichodu volicu****/
+            /*****zaciatok prichodu volicov****/
             //Time = 0
             //po kazde minute se testuje jestli neprisli vsichni volici
             for (i = 0 ; i < doba_voleb ; ++i){
@@ -238,7 +245,7 @@ class TimerVoleb : public Process{
 };
 
 
-/************ definovani metod tridy okresek ********************/
+/************ definovanie metod triedy okresek ********************/
 Okrsek::Okrsek(int c,int c_o,char *k,char *m,int p_v,int p_cl) : end_voleb(0), 
     cislo_okrsku(c), cislo_kraje(c_o), pocet_volicu(p_v),spoctene_hlasy(0),prave_pocitanych_listku(0),
     lide_v_mistnosti(0),komise(new Store("Komise", p_cl)),
@@ -353,7 +360,7 @@ void Okrsek::konec_pocitani_hlasu(){
 
 
 
-/************ konec definovani metod tridy okresek *************/
+/************ koniec definovania metod triedy okresek *************/
 
 class GenOkrsku : public Event
 {
@@ -384,6 +391,7 @@ public:
 
 int GenOkrsku::i = 1;
 
+//spustenie simulacie
 int main(void){
 
     Init(0, celkova_doba_voleb);
