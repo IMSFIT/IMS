@@ -39,12 +39,18 @@ Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci 
 
 Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom doktorom Hrubým(konzultácia ohľadne správnosti nášho návrhu Petriho siete).
 
+\subsection{Zdroj informácií}
+Informácie o štátnej volebnej infraštruktúre boli zisťované z dostupnej literatúry. Rovnako sme využili informácii dostupné na internete, ohľadne počtu okrskov a ich voličov. Rovnako sme využili štatistiky, ktoré sme generovali pri skončení programu.
+
+
+  
+
+
 \subsection{Testovacie prostredie}
 Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
 
 \subsection{Validita}
 Experimentovaním sme overovali validitu modelu, ktoré vo forme štatistik a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsobe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
-
 
 
 
@@ -64,9 +70,22 @@ Ciele projektu zahŕňajú:
 \indent
 
 \subsection{Téma práce}
-Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
-Obsah je dostupný online z nasledujúceho odkazu: http://perchta.fit.vutbr.cz:8000/vyuka-ims/31.\cite{Prokop:Algoritmy}
-Pre zobrazenie výsledkov bola použitá trieda Stat, ktorá je štandardnou súčasťou knižnice Simlib.
+Témou práce bola implementácia systému hromadnej obsluhy štátnej volebnej infraštruktúry. Volebná infraštruktúra v Českej republike funguje na nasledovnom princípe:
+Česká republika sa zaraďuje medzi dvojkomorové parlamentné 
+systémy. Tvorí ju Poslanecká snemovňa a Senát. Do PS ČR sa volí na 
+základe pomerného voličského systému. Základnú reguláciu nájdeme 
+v Ústave ČR. V čl. 18 nachádzame základné princípy volieb, ako je spôsob 
+voľby tajným hlasovaním na základe všeobecného, rovného a priameho 
+práva, podľa zásad pomerného zastúpenia. Ďalším dôleţitým zákonom je 
+zákon č. 247/1995 Sb., o voľbách. Niektoré ustanovenia sú prevedené 
+vyhláškou č. 233/2000 Sb. Tieto právne pramene sú základnými právnymi 
+prameňmi v oblasti volieb v ČR.\cite{Seda:Voleb}
+
+Voľby prebiehajú štandardne každé 4 roky, alebo po po predčasných voľbách. Každému občanovi republiky prislúcha 1 volebný hlas, ktorý musí odovzdať. Každý občas patrí pod istý volebný kraj, ktorý sa delí na menšiu časti zvané okrsky. Voľby prebiehajú štandardne v sobotu alebo v nedeľu dokopy 14 hodín. Každý občan, ktorý spĺňa podmienky príde v mieste svojho bydliska do volebnej miestnosti, kde sa preukáže platnosti dokladom totožnosti volebnej komisii, ktorá skontroluje údaje a povolí občanovi voliť. Každý občan ide jednotlivo za urnu, kde zaškrtne možnosť a následne vhodí svoj hlas do urny a zvyšné zahadzuje.
+
+Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na obecný úrad, odkiaľ sa posielalu na prepočítanie do lebného centra.
+
+  
 
 
 \subsection{Popis použitých postupov}
@@ -90,22 +109,6 @@ prehľadnosť (menší výskuy chýb).
 
 
 
-\subsection{Volebný systém v Českej republike}
-Česká republika sa zaraďuje medzi dvojkomorové parlamentné 
-systémy. Tvorí ju Poslanecká snemovňa a Senát. Do PS ČR sa volí na 
-základe pomerného voličského systému. Základnú reguláciu nájdeme 
-v Ústave ČR. V čl. 18 nachádzame základné princípy volieb, ako je spôsob 
-voľby tajným hlasovaním na základe všeobecného, rovného a priameho 
-práva, podľa zásad pomerného zastúpenia. Ďalším dôleţitým zákonom je 
-zákon č. 247/1995 Sb., o voľbách. Niektoré ustanovenia sú prevedené 
-vyhláškou č. 233/2000 Sb. Tieto právne pramene sú základnými právnymi 
-prameňmi v oblasti volieb v ČR.\cite{Seda:Voleb}
-
-Voľby prebiehajú štandardne každé 4 roky, alebo po po predčasných voľbách. Každému občanovi republiky prislúcha 1 volebný hlas, ktorý musí odovzdať. Každý občas patrí pod istý volebný kraj, ktorý sa delí na menšiu časti zvané okrsky. Voľby prebiehajú štandardne v sobotu alebo v nedeľu dokopy 14 hodín. Každý občan, ktorý spĺňa podmienky príde v mieste svojho bydliska do volebnej miestnosti, kde sa preukáže platnosti dokladom totožnosti volebnej komisii, ktorá skontroluje údaje a povolí občanovi voliť. Každý občan ide jednotlivo za urnu, kde zaškrtne možnosť a následne vhodí svoj hlas do urny a zvyšné zahadzuje.
-
-Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na obecný úrad, odkiaľ sa posielalu na prepočítanie do lebného centra.
-
-  
 
 
 
@@ -176,6 +179,12 @@ Program pracuje na základním procesu, který regeneruje v čase nula objekty r
 
 
 \section{Architektura simulačního modelu}
+
+\subsection{Zmena implementácie v knižnici SimLib}
+
+
+
+\subsection{Okrsky navrhnuté k simulácií}
 
 \subsection{Popis architektury}
 V programu je několik tříd, které zajišťují jeho spávný průběh. 
