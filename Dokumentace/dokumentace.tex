@@ -210,16 +210,13 @@ V prvotních experimentech jsme sledovali zda model funguje správně. Jedny z p
 Dále velmi podobným experimentem bylo zajištění správnosti přepočítávání volebních lístků, kdy se vyhodnotili, že jsou chybné. Experimentovali jsme tento problém na podobném principu jako v předchozím případě. Vstupem byla 100\% účast voličů na 1 okrsek a 40\% šance, že výsledky se budou muset znovu přepočítat. Očekávalo se, že ve výstupním souboru budou výpisy počítání všech volebních lístků alespoň 2 za sebou. Z výsledného souboru jsme zjistili, že při vytvoření všech volebních lístků se vyhodnotili výsledky po určité době čekání na ohodnocení správnosti volebních lístků bez toho, aby se počkalo na zpracování všech volebních lístků. Proto jsme vytvořili ve tříde třídy \textbf{Okrsek} atribut \textbf{prave\_pocitanych\_listku}. Díky tomuto atributu jsme zajistili, že v případě vyhodnocení lístků máme jistotu, že ani jeden z nich se už nepočítá. 
 \subsection{Popis experimentů}
 V dalších experimentech jsme se zaměřili pouze na vytíženost volebního centra. 
-Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2 sekund. Ve výsledných statistikách jsme zjistili 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. Obecně se na volební centrum nečekalo. \newline
+Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2 sekund. Ve výsledných statistikách jsme zjistili, že průměrně okrsky čekají 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. Obecně se na volební centrum nečekalo. \newline
 Dalším experimentem jsme chtěli zjistit zda-li se změní čekání okrsků na volební centrum když změníme volevní účast. Tu jsme si změnili na 175\%. Očekávali jsme delší fronty orksků na volební centrum. Výsledkem byla změna v průměru čekání volebních okrsků byla přibližně 2.1 sekundy. Maximální délka fronty byla 7 okrsků. \newline
-Toto nás dovedlo k názoru, že model volebního systému v ČR, který jsme vytvořili není tolik reálný. Změnili jsme čas zpracování výsledků na 6 sekundy. A reálnost systému jsme znovu ověřovali experimenty.
-\newline
-\newline
-tady bude ještě jeen experiment
-\newline
-\newline
+Toto nás dovedlo k názoru, že model volebního systému v ČR, který jsme vytvořili není tolik reálný,jak jsme zamýšleli. Změnili jsme čas zpracování výsledků na 6 sekund. A reálnost systému jsme znovu ověřovali experimenty.\newline
+Vstupem byla 100\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2-8 minut. Ve výsledných statistikách jsme zjistili, že průměrně okrsky čekají ve frontě 15 minut. Ve frontě na volební centrum se stav zlepšil na maximálních 250 volební okrsky z celé republiky. 
+
 \subsection{Závěr experimentů}
-Bylo provedeno 7 experimentů na vytíženost centra. V průběhů experimentů byla odstraněna nereálná situace čekání orksků na volební centrum.
+Bylo provedeno 8 experimentů na vytíženost centra. V průběhů experimentů byla odstraněna nereálná situace čekání orksků na volební centrum.
 
 
 \section{Zhrnutie simulačných experimentov a záver}
