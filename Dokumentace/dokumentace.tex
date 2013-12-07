@@ -43,11 +43,9 @@ Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom
 Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_64$ GNU/Linux pre menšie vzorky dát a pre rozsiahlejšie testovanie na väčšej vzorke dát: FreeBSD eva.fit.vutbr.cz 9.2-STABLE FreeBSD amd64.
 
 \subsection{Validita}
-Experimentovaním sme overovali validitu modelu, ktoré vo forme štatistik a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsoboe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
+Experimentovaním sme overovali validitu modelu, ktoré vo forme štatistik a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsobe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
 
-\subsection{Zadanie}
-Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
-Obsah je dostupný online z nasledujúceho odkazu: http://perchta.fit.vutbr.cz:8000/vyuka-ims/31.\cite{Prokop:Algoritmy}
+
 
 
 
@@ -65,12 +63,20 @@ Ciele projektu zahŕňajú:
 
 \indent
 
-
+\subsection{Téma práce}
+Obsah zadania: "Státní volební infrastruktura nechť se skládá z volebního informačního centra a sítě volebních okrsků. Centrum přijímá zprávy od volebních okrsků a prezentuje výsledky v jednotlivých krajích (nutno modelovat server centra jako obslužnou linku). Volební okrsky jsou SHO obsahující obslužné linky: komise a místo pro provedení volby do obálky ("za plentou"). Modelujte proces příchodů voličů v průběhu doby voleb. Volební komise skončí práci buď po odvolení všech občanů v okrsku nebo okamžikem konce volebního víkendu. Potom sčítá hlasy (doba je závislá na počtu obálek v urně) a odesílá výsledky do centra. Prostudujte systém voleb v ČR a síť volebních okrsků. Konkrétní síť okrsků generujte náhodně s následujícím omezením: sumární počet voličů v krajích musí odpovídat realitě a počet voličů v krajských městech musí odpovídat realitě. Okrsky nějak vhodně agregujte tak, aby jejich celkový počet byl cca 200. Náhodně generovanou síť okrsků uložte do souboru a experimenty provádějte stále nad stejným modelem sítě okrsků. Zdokumentujte model sítě okrsků. Na experimentech ukažte propustnost centra, doby čekání okrsků na připojení do centra, celkovou dobu práce lidí okrskových komisích."
+Obsah je dostupný online z nasledujúceho odkazu: http://perchta.fit.vutbr.cz:8000/vyuka-ims/31.\cite{Prokop:Algoritmy}
 Pre zobrazenie výsledkov bola použitá trieda Stat, ktorá je štandardnou súčasťou knižnice Simlib.
 
 
 \subsection{Popis použitých postupov}
-Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Simlib. Toto rozhodnutie bolo učinené na základe formálnych požiadavok na tvorbu projektu. Ďalším kritériom bola aj široká ponuka prostriedkov, ktoré knižnica Simlib ponúka na simuláciu modelov. 
+Systém je simulovaný pomocou diskrétnej simulácie (předmet IMS slajd 122) ako systém hromadnej obsluhy 
+(předmet IMS slajd 139). Je to výhodné napr. z hľadiska sledovania dĺžky front (predmět IMS slajd 141) 
+obslužných liniek (predmět IMS slajd 139) jednotlivých častí volebného centra. Použitou 
+technologií k tomuto účelu je jazyk C++ a knižnica Simlib (predmět IMS (1) slajd 72). Výhodou spomínaných 
+technológií je j rýchlosť simulácie a 
+prehľadnosť (menší výskuy chýb).
+
 
 
 \subsection{Pôvod použitých technológií}
@@ -79,9 +85,11 @@ Pre implementáciu bol zvolený jazyk C++ a knižnicu určenú na simuláciu Sim
 \item C++ - http://en.wikipedia.org/wiki/C++
 \item Ubuntu - http://www.ubuntu.com/
 \item Petriho siete - $http://en.wikipedia.org/wiki/Petri_net$
-\item GNU PLOT - $http://www.gnuplot.info/$
 
 \end{itemize}
+
+
+
 \subsection{Volebný systém v Českej republike}
 Česká republika sa zaraďuje medzi dvojkomorové parlamentné 
 systémy. Tvorí ju Poslanecká snemovňa a Senát. Do PS ČR sa volí na 
@@ -106,7 +114,8 @@ Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na ob
 
 
 \section{Koncepce - modelářska témata}
-Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.\newpage 
+V tejto kapitelo bude načrtnutý koncetuálny model predstavujúci systém volebnej infraštruktúry.
+Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury. 
 \begin{figure}[h]
 
 \begin{center}
@@ -198,7 +207,7 @@ V programu je několik tříd, které zajišťují jeho spávný průběh.
 \end{itemize}
 
 
-
+\subsection{Spustenie programu}
 \newpage
 
 
