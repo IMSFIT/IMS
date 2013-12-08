@@ -26,9 +26,9 @@
 \newpage
 
 \section{Úvod}
-Táto dokumentácia sa zaoberá vývojom, implementáciou a testovaním systéum hromadnej obsluhy "Štátna volebná infraštruktúra", ktorá simuluje volebný systém v Českej republike zahrňujúci voľby v okrskov a krajských mestskách a následne odoslanie a počítanie hlasov v informačnom centre.
-\indent
-Na základe modelu a simulácie bude ukázané chovanie systému so zreteľom na ukázanie slabých miest pri voľbách. Tento projekt môže byť použitý na optimalizáciu systému voliev v Českej republike vzhľadom na zrychlénie celého systému počítania hlasov a rozdelenie do okrskov.
+Táto dokumentácia sa zaoberá vývojom, implementáciou a testovaním systému hromadnej obsluhy "Štátna volebná infraštruktúra", ktorá simuluje\cite{Kutis:Simulace} volebný systém v Českej republike zahrňujúci voľby v okrskov a krajských mestskách a následne odoslanie a počítanie hlasov v informačnom centre.\\
+
+Na základe modelu a simulácie bude ukázané chovanie systému so zreteľom na ukázanie slabých miest pri voľbách. Tento projekt môže byť použitý na optimalizáciu systému voliev v Českej republike vzhľadom na zrýchlenie celého systému počítania hlasov a rozdelenia do okrskov.
 
 \subsection{Autori}
 Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci autori:
@@ -37,7 +37,7 @@ Na projekte SHO "Štátna volebná infraštruktúra" sa podieľali nasledujúci 
 \item Vojtěch Meca(xmecav00)
 \end{itemize}
 
-Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom doktorom Hrubým(konzultácia ohľadne správnosti nášho návrhu Petriho siete).
+Okrem vyššie spomenutých ľudí sme využili možňosť konzultácie s pánom doktorom \\ Hrubým(konzultácia ohľadne správnostinášho návrhu Petriho siete).
 
 \subsection{Zdroj informácií}
 Informácie o štátnej volebnej infraštruktúre boli zisťované z dostupnej literatúry. Rovnako sme využili informácii dostupné na internete, ohľadne počtu okrskov a ich voličov. Rovnako sme využili štatistiky, ktoré sme generovali pri skončení programu.
@@ -52,7 +52,7 @@ Pre testovacie účely boli použité architekrúry:Linux 3.2.0-56-generic $86_6
 \subsection{Validita}
 Experimentovaním sme overovali validitu modelu, ktoré vo forme štatistik a jeho následnej analýze odpovedali nášhu odhadovanému predpokladu. Tak isto sme využili dostupné informácie o spôsobe volieb v Českej republiky a štatistických informáciách, ktoré sú verejne prístupné na internete.
 
-
+\newpage
 
 
 \subsection{Ciele projektu}
@@ -73,28 +73,23 @@ Ciele projektu zahŕňajú:
 Témou práce bola implementácia systému hromadnej obsluhy štátnej volebnej infraštruktúry. Volebná infraštruktúra v Českej republike funguje na nasledovnom princípe:
 Česká republika sa zaraďuje medzi dvojkomorové parlamentné 
 systémy. Tvorí ju Poslanecká snemovňa a Senát. Do PS ČR sa volí na 
-základe pomerného voličského systému. Základnú reguláciu nájdeme 
-v Ústave ČR. V čl. 18 nachádzame základné princípy volieb, ako je spôsob 
-voľby tajným hlasovaním na základe všeobecného, rovného a priameho 
-práva, podľa zásad pomerného zastúpenia. Ďalším dôleţitým zákonom je 
-zákon č. 247/1995 Sb., o voľbách. Niektoré ustanovenia sú prevedené 
-vyhláškou č. 233/2000 Sb. Tieto právne pramene sú základnými právnymi 
+základe pomerného voličského systému.  Ďalším dôleţitým zákonom je 
+zákon č. 247/1995 Sb., o voľbách. Tieto právne pramene sú základnými právnymi 
 prameňmi v oblasti volieb v ČR.\cite{Seda:Voleb}
 
-Voľby prebiehajú štandardne každé 4 roky, alebo po po predčasných voľbách. Každému občanovi republiky prislúcha 1 volebný hlas, ktorý musí odovzdať. Každý občas patrí pod istý volebný kraj, ktorý sa delí na menšiu časti zvané okrsky. Voľby prebiehajú štandardne v sobotu alebo v nedeľu dokopy 14 hodín. Každý občan, ktorý spĺňa podmienky príde v mieste svojho bydliska do volebnej miestnosti, kde sa preukáže platnosti dokladom totožnosti volebnej komisii, ktorá skontroluje údaje a povolí občanovi voliť. Každý občan ide jednotlivo za urnu, kde zaškrtne možnosť a následne vhodí svoj hlas do urny a zvyšné zahadzuje.
+Voľby prebiehajú štandardne každé 4 roky, alebo po predčasných voľbách. Každému občanovi republiky prislúcha 1 volebný hlas, ktorý musí odovzdať. Každý občas patrí pod istý volebný kraj, ktorý sa delí na menšiu časti zvané okrsky. Voľby prebiehajú štandardne v sobotu alebo v nedeľu dokopy 14 hodín. Každý občan, ktorý spĺňa podmienky príde v mieste svojho bydliska do volebnej miestnosti, kde sa preukáže platnosti dokladom totožnosti volebnej komisii, ktorá skontroluje údaje a povolí občanovi voliť. Každý občan ide jednotlivo za urnu, kde zaškrtne možnosť a následne vhodí svoj hlas do urny a zvyšné zahadzuje.
 
-Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na obecný úrad, odkiaľ sa posielalu na prepočítanie do lebného centra.
+Na konci volieb sú hlasí v jednotlivých okrskoch sčítané a odnesené na obecný úrad, odkiaľ sa posielalu na prepočítanie do volebného centra.
 
   
 
 
 \subsection{Popis použitých postupov}
 Systém je simulovaný pomocou diskrétnej simulácie (předmet IMS slajd 122) ako systém hromadnej obsluhy 
-(předmet IMS slajd 139). Je to výhodné napr. z hľadiska sledovania dĺžky front (predmět IMS slajd 141) 
-obslužných liniek (predmět IMS slajd 139) jednotlivých častí volebného centra. Použitou 
+(předmet IMS slajd 139). Je to výhodné napr. z hľadiska sledovania dĺžky front (predmet IMS slajd 141) 
+obslužných liniek (predmet IMS slajd 139) jednotlivých častí volebného centra. Použitou 
 technologií k tomuto účelu je jazyk C++ a knižnica Simlib (predmět IMS (1) slajd 72). Výhodou spomínaných 
-technológií je j rýchlosť simulácie a 
-prehľadnosť (menší výskuy chýb).
+technológií je  rýchlosť simulácie.
 
 
 
@@ -118,7 +113,7 @@ prehľadnosť (menší výskuy chýb).
 
 \section{Koncepce - modelářska témata}
 V tejto kapitelo bude načrtnutý koncetuálny model predstavujúci systém volebnej infraštruktúry.
-Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury. 
+Na obrázku č. \ref{koncept} je uvedeno schéma systému Volební infrastruktury. 
 \begin{figure}[h]
 
 \begin{center}
@@ -133,7 +128,7 @@ Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.
 \newpage
 
 \subsection{Opis konceptuálneho modelu}
- V obrázku č. 1 můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě: 
+ V obrázku č. \ref{koncept}můžeme vidět několik různých obdelníčků a zaoblených obdelníčků. Popišeme si je jednotlivě: 
  \begin{itemize}
 \item    a) Zaoblený obdelníček s názvem Generátor okrsků
 \subitem  Tento zaoblený obdelníček má za úkol generovat obdelníčky Okrsky. Generuje jich přesně kolik jich má vzniknout (určeno například souborem). Po vygenerovaní Okrsků generátor ukončí svou činnost.
@@ -151,25 +146,26 @@ Na obrázku č. 1 je uvedeno schéma systému Volební infrastruktury.
 \subitem  Po vytvoření Procesem počítání hlasů začne generovat Procesy počítání listků č.1 .. n. Po vygerenerování všech lístků zkončí svou činnost.
 \item    h) Zaoblený obdelníček s názvem Proces počítání listků č.1 .. n
 \subitem  Po vytvoření simuluje práci jednoho člena volební komise s tímto lístkem. Po ukončení počítání tohoto lístku jedním členem komise činnost tohoto obdelníčku končí.
-\end{itemize}
-\newpage 
+\end{itemize}\newpage 
+\subsection{Ukážka Petriho siete pre odovzdávanie hlasu}
+
 \begin{figure}[h]
 
 \begin{center}
 
 \includegraphics[scale=0.4]{img/petri2.eps} 
-\caption{Konceptuálny model}
-\label{koncept}
+\caption{Petriho sieť pre odovzdávanie hlasu}
+\label{petri}
 
 \end{center}
 
 \end{figure}
 
-Obrázok popisuje Petriho sieť, ktorá ukazujem systém volieb. Ukazuje príchod voliča, odvolenie voliča. Na začiatku sa vygenerujú voliči, ktorí prijdu do volebnej miestnosti. Pri vstupe do miestnosti si občan zabere člena volebnej komisie, ktorý je reprezentovaný štruktúrou "Store" s kapacitou 12 v Simlibe. Pokiaľ nie je voľný nejaký člen volebnej komisie, tak se zařadí do společné fronty a čeká na uvolnění některého ze členů volební komise. Pokiaľ sa občan dostane na radu, tak ho člen volebnej komisie skontroluje. To trvá exponeniciálně 30 sekúnd. Po skončení kontroly občana členem volební komise, občan pokračuje ďalej. Zabere si "Store" s kapacitou 3, ktorý reprezentuje volebnú plentu. V prípade, že nie je volná plenta, tak sa občan zaradí do jedné společné fronty. Následne užívateľ zajde za plentu a zaškrtá výsledok. To trvá exponenciálně 15 sekúnd. Následne si zabere plentu, ktorá je len 1. Pokiaľ nie je voľná tak sa zaradí do fronty a čaká. Po vhození lístku reprezentující dobu exponenciálně 2 sekundy občan opúšťa systém.
+Obrázok č.\ref{petri} popisuje Petriho sieť, ktorá ukazujem systém volieb. Ukazuje príchod voliča, odvolenie voliča. Na začiatku sa vygenerujú voliči, ktorí prijdu do volebnej miestnosti. Pri vstupe do miestnosti si občan zabere člena volebnej komisie, ktorý je reprezentovaný štruktúrou "Store" s kapacitou 12 v Simlibe. \\ Pokiaľ nie je voľný nejaký člen volebnej komisie, tak se zařadí do společné fronty a čeká na uvolnění některého ze členů volební komise. Pokiaľ sa občan dostane na radu, tak ho člen volebnej komisie skontroluje. To trvá exponeniciálně 30 sekúnd. Po skončení kontroly občana členem volební komise, občan pokračuje ďalej. Zabere si "Store" s kapacitou 3, ktorý reprezentuje volebnú plentu. \\ V prípade, že nie je volná plenta, tak sa občan zaradí do jedné společné fronty. Následne užívateľ zajde za plentu a zaškrtá výsledok. To trvá exponenciálně 15 sekúnd. Následne si zabere plentu, ktorá je len 1. Pokiaľ nie je voľná tak sa zaradí do fronty a čaká. Po vhození lístku reprezentující dobu exponenciálně 2 sekundy občan opúšťa systém.
 \newpage
 
 
-\subsection{Forma konceptuálneho modelu}
+
 
 
 \subsection{Implementácia}
@@ -226,24 +222,65 @@ Hlavní cíl, proč byl model vytvořen, bylo zjistit vytíženost Volevního ce
   
 \subsection{Popis experimentů}
 V dalších experimentech jsme se zaměřili pouze na vytíženost volebního centra. 
-Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2 sekund. Z obrásku č.  .... získáme  výsledné statistiky, ve kterýc jsme zjistili, že průměrně okrsky čekají v minutách 0.0231881, což je přibližně 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. Obecně se na volební centrum nečekalo. Z obrázku vidíme i další informace o výpisu statistik modelu. \newline
+Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2 sekund. Z obrásku č.  \ref{50} získáme  výsledné statistiky, ve kterýc jsme zjistili, že průměrně okrsky čekají v minutách 0.0231881, což je přibližně 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. Obecně se na volební centrum nečekalo. Z obrázku vidíme i další informace o výpisu statistik modelu. \newline
 \newline
-soupni tady obrázek s názvem 0_5.png
-\newline
-\newline
-Dalším experimentem jsme chtěli zjistit zda-li se změní čekání okrsků na volební centrum když změníme volevní účast. Tu jsme si změnili na 175\%. Očekávali jsme delší fronty orksků na volební centrum. V obrázku č. ... zišťujeme výsledek, že byla změna v průměru čekání volebních okrsků byla 0.034749 v minutách, což je přibližně 2.1 sekundy. Maximální délka fronty byla 7 okrsků. \newline
-\newline
-soupni tady obrázek s názvem 1_75.png
-\newline
-\newline
-Toto nás dovedlo k názoru, že model volebního systému v ČR, který jsme vytvořili není tolik reálný,jak jsme zamýšleli. Změnili jsme čas zpracování výsledků na 6 sekund. A reálnost systému jsme znovu ověřovali experimentem.\newline
-Vstupem byla 100\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2-8 minut. Z obrázku můžeme vidět, že ve výsledných statistikách zjišťujeme, že průměrně okrsky čekají ve frontě 15 minut. Ve frontě na volební centrum se stav zlepšil na maximálních 250 volební okrsky z celé republiky. Toto byla reálnější situace, než v předchozích případech, což bylo náš cíl experimentů.
-\newline
-\newline
-soupni tady obrázky s názvy 100.png a 100_second_part.png
-\newline
-\newline
+\begin{figure}
 
+\begin{center}
+
+\includegraphics[scale=0.6]{img/0_5.eps} 
+\caption{50\,\% účastníkov}
+\label{50}
+
+\end{center}
+
+\end{figure}
+\newline
+\newline
+\newpage
+Dalším experimentem jsme chtěli zjistit zda-li se změní čekání okrsků na volební centrum když změníme volevní účast. Tu jsme si změnili na 175\%. Očekávali jsme delší fronty orksků na volební centrum. V obrázku č. \ref{obr3} zišťujeme výsledek, že byla změna v průměru čekání volebních okrsků byla 0.034749 v minutách, což je přibližně 2.1 sekundy. Maximální délka fronty byla 7 okrsků. \newline
+\newline
+\begin{figure}
+
+\begin{center}
+
+\includegraphics[scale=0.6]{img/1_75.eps} 
+\caption{175\,\% účasť}
+\label{obr3}
+
+\end{center}
+
+\end{figure}
+\newpage
+Toto nás dovedlo k názoru, že model volebního systému v ČR, který jsme vytvořili není tolik reálný,jak jsme zamýšleli. Změnili jsme čas zpracování výsledků na 6 sekund. A reálnost systému jsme znovu ověřovali experimentem.\ref{100}\newline
+Vstupem byla 100\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 2-8 minut. Z obrázku \ref{102}můžeme vidět, že ve výsledných statistikách zjišťujeme, že průměrně okrsky čekají ve frontě 15 minut. Ve frontě na volební centrum se stav zlepšil na maximálních 250 volební okrsky z celé republiky. Toto byla reálnější situace, než v předchozích případech, což bylo náš cíl experimentů.
+\newline
+\newline
+\begin{figure}[h]
+
+\begin{center}
+
+\includegraphics[scale=0.6]{img/100.eps} 
+\caption{100\,\% účastníkov}
+\label{100}
+
+\end{center}
+
+\end{figure}
+\begin{figure}
+
+\begin{center}[h]
+
+\includegraphics[scale=0.7]{img/100_second_part.eps} 
+\caption{100\,\% účastníkov}
+\label{102}
+
+\end{center}
+
+\end{figure}
+\newline
+\newline
+\newpage
 \subsection{Závěr experimentů}
 Bylo provedeno 8 experimentů na vytíženost centra. V průběhů experimentů byla odstraněna nereálná situace čekání orksků na volební centrum.
 

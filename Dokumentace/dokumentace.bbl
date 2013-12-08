@@ -1,0 +1,19 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL: }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\selectlanguage}[1]{\relax}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{Seda:Voleb}
+Chytilek, R.: \emph{Volebn\'{i} syst\'{e}my}. Praha:Portal, 2009, ISBN
+  978-80-7367-548-6.
+
+\bibitem{Kutis:Simulace}
+Kuti\v{s}, V.: \emph{Z\'{a}klady modelovania a simul\'{a}cie}. Bratislava:STU,
+  2010, ISBN 978-80-227-3345-8.
+
+\end{thebibliography}
