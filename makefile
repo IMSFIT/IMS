@@ -15,7 +15,7 @@ projekt: projekt_v4.cc
 run: 
 	./projekt
 pack:
-	tar cvzf xmagam00_xmecav00.tar.gz model.cc  makefile
+	tar cvzf 9_xmecav00_xmagam00.tar.gz projekt_v4.cc dokumentace.pdf okrsky.txt makefile
 clean:
-	rm -f model gen_okresu projekt gen_poctu pocitani_volebni_komise volba_volice *~ *.bak *.tar.gz
+	rm -f projekt  *~ *.bak *.tar.gz
 	
