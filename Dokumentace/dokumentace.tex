@@ -177,6 +177,9 @@ Program pracuje na základním procesu, který regeneruje v čase nula objekty r
 \subsection{Zmena implementácie v knižnici SimLib}
 Při kompilaci modelu jsme narazili na problém v knihovně SimLib konkrétně s proměnou CANARY1. Po konzultaci s Dr. Petrem Peringerem jsme změnili v knihovně SimLib v souboru process.cc řádek 405 \textbf{volatile int mylocal = CANARY1;} na řádek \textbf{volatile long mylocal = CANARY1;}. Tím se problém vyřešil a náš model jsme mohli zkompilovat.
 
+\subsection{Popis struktury programu}
+Zdrojový soubor programu  se  nazývá \textbf{projekt_v4.cc}.
+
 \subsection{Okrsky navrhnuté k simulácií}
 Data k okrskům jsme získávali při experimentech ze souboru \textbf{okrsky.txt}. Na prvním řádku získáváme informaci o množství okrsků. Další řádky jsou ve formátu 4 posobě jdoucích informací. První z nich je číslo kraje. Druhý z nich je název kraje, další údaj v sobě nese název krajského města. Pokud kraj nemá krajské město, tak zde nacházíme znak \textbf{'-'}. Poslední a nejduležitější je údaj o počtu občanů v okrsku.
 
@@ -224,7 +227,6 @@ Pro validitu našeho modelu jsme si stanovili výstup experimentů, že při 100
 \subsection{Popis experimentů}
 Zde si popíšeme jedny prvních experimentů, které jsme prováděli.
 Vstupem byla 50\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru 13-17 minut. Dále jsme předpokládali průměrné počítání hlasu za 2-3 hodiny. Z obrásku č. \ref{obr3} u kolonky a vidíme výsledné statistiky, ve kterých jsme zjistili, že průměrné počítání hlasů v okrscích je 263 minut, což je 4.4 hodiny. Dále můžeme z obrázku č. \ref{obr3} u kolonky b vyčíst, že průměrně okrsky čekají na volební centrum v minutách 0.0231881, což je přibližně 1.4 sekundy. Další zajímavý udaj byl, že ve frontě na volební centrum bylo maximálně 3 volební okrsky z celé republiky. \newline
-\newline
 \begin{figure}[h]
 
 \begin{center}
@@ -252,12 +254,10 @@ Dalším experimentem jsme chtěli zjistit zda-li se změní čekání okrsků n
 \end{center}
 
 \end{figure}
-\newline
-\newline
+
 Z těchto prvotních experimentů můžeme říci, že model bylo potřeba změnit, aby dosáhl naším původním předpokladům. V dalších experimentech jsme zjiťovali, jak se model mění při změně čekání zpracování údajů od volebního centra. Zvyšovali jsme postupně tento údaj, až jsme dostali tohoto experimentu.
 \newpage
-Vstupem byla 100\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 13-17 minut a předpokládali jsme průměrnou dobu počítání jako v předchozích experimentech 2-3 hodiny. Z obrázku č. \ref{obr5}(zde má být odkaz na obr s názvem 100.png)  můžeme vidět ve výsledných statistikách, že průměrně okrsky čekají ve frontě 15 minut. Můžeme si taktéž všimnout, že na volební centrum čekalo více okrsků a to maximálně 250. Dále si z obrázku \ref{6}(okaz na obrazek s nazevem 100\_cel\_poc\_rep.png) můžeme všimnout, že doba počítání hlasů je přibližně 152 minuty. Díky výdledkům tohoto experimentu jsme došli názoru, že model funguje podle našich původních představ.
-\newline
+Vstupem byla 100\% účast voličů a očekávalo se, že výstupem bude doba čekání na volební centrum v průměru okolo 13-17 minut a předpokládali jsme průměrnou dobu počítání jako v předchozích experimentech 2-3 hodiny. Z obrázku č. \ref{obr5} můžeme vidět ve výsledných statistikách, že průměrně okrsky čekají ve frontě 15 minut. Můžeme si taktéž všimnout, že na volební centrum čekalo více okrsků a to maximálně 250. Dále si z obrázku \ref{obr6} můžeme všimnout, že doba počítání hlasů je přibližně 152 minuty. Díky výdledkům tohoto experimentu jsme došli názoru, že model funguje podle našich původních představ.
 \newline
 \begin{figure}[h]
 
