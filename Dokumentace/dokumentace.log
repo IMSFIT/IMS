@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2012.8.2)  9 DEC 2013 00:43
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2012.8.2)  9 DEC 2013 14:32
 entering extended mode
  %&-line parsing enabled.
 **dokumentace.tex
@@ -625,54 +625,78 @@ Psla voli^^Tc^^Wu po-moc^^S^^P me-tody decre-ment[]prave[]pocitanych[]listku().
 [9] [10]
 File: img/0_5.eps Graphic file (type eps)
  <img/0_5.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 224--240
+Underfull \hbox (badness 10000) in paragraph at lines 225--241
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--240
+Underfull \hbox (badness 10000) in paragraph at lines 225--241
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--240
+Underfull \hbox (badness 10000) in paragraph at lines 225--241
 
  []
 
-[11] [12]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11]
 File: img/1_75.eps Graphic file (type eps)
  <img/1_75.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 241--254
+Underfull \hbox (badness 10000) in paragraph at lines 242--258
 
  []
 
-[13]
+
+Underfull \hbox (badness 10000) in paragraph at lines 242--258
+
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[12]
+
+LaTeX Warning: Reference `6' on page 13 undefined on input line 259.
+
 File: img/100.eps Graphic file (type eps)
- <img/100.eps>
-File: img/100_second_part.eps Graphic file (type eps)
- <img/100_second_part.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 255--283
+<img/100.eps>
+File: img/100_cel_poc_rep.eps Graphic file (type eps)
+ <img/100_cel_poc_rep.eps>
+Underfull \hbox (badness 10000) in paragraph at lines 259--286
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--283
+Underfull \hbox (badness 10000) in paragraph at lines 259--286
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--283
+Underfull \hbox (badness 10000) in paragraph at lines 259--286
 
  []
 
-[14] [15] (./dokumentace.bbl) [16] (./dokumentace.aux) ) 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[13] [14] (./dokumentace.bbl) [15] (./dokumentace.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 7665 strings out of 493858
- 104208 string characters out of 1153329
+ 7666 strings out of 493858
+ 104215 string characters out of 1153329
  183220 words of memory out of 3000000
- 10842 multiletter control sequences out of 15000+50000
+ 10843 multiletter control sequences out of 15000+50000
  10056 words of font info for 35 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
  38i,7n,36p,1506b,384s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on dokumentace.dvi (17 pages, 85972 bytes).
+Output written on dokumentace.dvi (16 pages, 87956 bytes).

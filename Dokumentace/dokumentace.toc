@@ -21,6 +21,6 @@
 \contentsline {section}{\numberline {5}Podstata simula\IeC {\v c}n\IeC {\'y}ch experimentov}{11}{section.5}
 \contentsline {subsection}{\numberline {5.1}Postup experimentov\IeC {\'a}n\IeC {\'\i }}{11}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}Popis experiment\IeC {\r u}}{11}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Z\IeC {\'a}v\IeC {\v e}r experiment\IeC {\r u}}{15}{subsection.5.3}
-\contentsline {section}{\numberline {6}Zhrnutie simula\IeC {\v c}n\IeC {\'y}ch experimentov a z\IeC {\'a}ver}{15}{section.6}
-\contentsline {section}{\numberline {7}Referencie}{16}{section.7}
+\contentsline {subsection}{\numberline {5.3}Z\IeC {\'a}v\IeC {\v e}r experiment\IeC {\r u}}{14}{subsection.5.3}
+\contentsline {section}{\numberline {6}Zhrnutie simula\IeC {\v c}n\IeC {\'y}ch experimentov a z\IeC {\'a}ver}{14}{section.6}
+\contentsline {section}{\numberline {7}Referencie}{15}{section.7}
