@@ -178,7 +178,7 @@ Program pracuje na základním procesu, který regeneruje v čase nula objekty r
 Při kompilaci modelu jsme narazili na problém v knihovně SimLib konkrétně s proměnou CANARY1. Po konzultaci s Dr. Petrem Peringerem jsme změnili v knihovně SimLib v souboru process.cc řádek 405 \textbf{volatile int mylocal = CANARY1;} na řádek \textbf{volatile long mylocal = CANARY1;}. Tím se problém vyřešil a náš model jsme mohli zkompilovat.
 
 \subsection{Popis struktury programu}
-Zdrojový soubor programu  se  nazývá \textbf{projekt_v4.cc}.
+Zdrojový soubor programu  se  nazývá \textbf{$projekt_v4.cc$}.
 
 \subsection{Okrsky navrhnuté k simulácií}
 Data k okrskům jsme získávali při experimentech ze souboru \textbf{okrsky.txt}. Na prvním řádku získáváme informaci o množství okrsků. Další řádky jsou ve formátu 4 posobě jdoucích informací. První z nich je číslo kraje. Druhý z nich je název kraje, další údaj v sobě nese název krajského města. Pokud kraj nemá krajské město, tak zde nacházíme znak \textbf{'-'}. Poslední a nejduležitější je údaj o počtu občanů v okrsku.
